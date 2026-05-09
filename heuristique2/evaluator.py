@@ -95,20 +95,23 @@ def _search_with_score(conjecture, score_fn, time_limit=EVAL_TIME_LIMIT):
 def evaluate(code, benchmark_df, subset_size=EVAL_SUBSET_SIZE):
     """
     Évalue une fonction de score sur un sous-ensemble aléatoire du benchmark.
-    Retourne le nombre de conjectures réfutées.
+    Retourne (nb_réfutées, details) où details = {'solved': [...], 'failed': [...]}.
     """
     score_fn = load_score_function(code)
     if score_fn is None:
-        return 0
+        return 0, {'solved': [], 'failed': []}
 
     subset = benchmark_df.sample(n=min(subset_size, len(benchmark_df)), random_state=random.randint(0, 9999))
-    found = 0
+    solved, failed = [], []
 
     for _, row in subset.iterrows():
+        cid = row['Conjecture ID']
         success, elapsed = _search_with_score(row, score_fn)
         status = "OK" if success else "--"
-        print(f"  [{status}] Conjecture {row['Conjecture ID']} ({elapsed:.1f}s)")
+        print(f"  [{status}] Conjecture {cid} ({elapsed:.1f}s)")
         if success:
-            found += 1
+            solved.append(cid)
+        else:
+            failed.append(cid)
 
-    return found
+    return len(solved), {'solved': solved, 'failed': failed}
