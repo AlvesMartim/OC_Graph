@@ -2,20 +2,21 @@ from fractions import Fraction
 import ast
 
 INVARIANTS_LIST = """
-- order, size, density, diameter, radius
-- minimum_degree, maximum_degree, average_degree
+- order (ou n), size (ou m), density, diameter, radius
+- minimum_degree (ou delta), maximum_degree (ou Delta), average_degree
 - first_zagreb_index, second_zagreb_index, randic_index, harmonic_index
 - largest_eigenvalue, second_smallest_laplace_eigenvalue
 - largest_distance_eigenvalue, proximity, remoteness
-- triangle_number, clique_number, domination_number, total_domination_number
-- independence_number, independent_domination_number
-- vertex_cover_number, matching_number, node_connectivity, edge_connectivity
+- triangle_number (ou triangles), clique_number, domination_number (ou gamma), total_domination_number
+- independence_number (ou alpha), independent_domination_number
+- vertex_cover_number (ou tau), matching_number, node_connectivity, edge_connectivity
 """
 
-BASELINE_FUNCTION = '''def score(invariants: dict, conjecture: dict) -> float:
-    """Fonction de base : violation pure sans guidage."""
+BASELINE_FUNCTION = '''def heuristic_score(G, invariants: dict, conjecture: dict) -> float:
+    """Fonction de base : violation pure."""
     from fractions import Fraction
     import ast
+    import math
 
     X_val = float(invariants.get(conjecture['X'], 0))
     Y_val = float(invariants.get(conjecture['Y'], 0))
@@ -31,22 +32,23 @@ BASELINE_FUNCTION = '''def score(invariants: dict, conjecture: dict) -> float:
         f_X = float(conjecture.get('Degree', 1)) * X_val
 
     if conjecture['Sign'] in ('<=', '<'):
-        return Y_val - f_X
+        violation = Y_val - f_X
     else:
-        return f_X - Y_val'''
+        violation = f_X - Y_val
+        
+    return violation'''
 
 SYSTEM_CONTEXT = """
-Tu es un expert en théorie des graphes et en optimisation combinatoire.
+Tu es un expert en théorie des graphes et en apprentissage automatique.
 
 ## Contexte
 
-Une recherche locale cherche des contre-exemples à des conjectures de la forme :
-  Y(G) <= f(X(G))   ou   Y(G) >= f(X(G))
+Une recherche locale cherche des contre-exemples à des conjectures (Y <= f(X) ou Y >= f(X)).
+L'idée est de guider le parcours en maximisant une fonction de ce type :
+  F(G) = violation(G) + bonus(G) - penalty(G)
 
-À chaque itération, un graphe muté est évalué par une fonction `score`. La recherche
-suit le gradient de ce score : elle explore les graphes qui maximisent cette valeur.
-
-Un score > 0 signifie que le graphe viole la conjecture : c'est un contre-exemple.
+Un score de F(G) > 0 dans notre évaluateur confirme un contre-exemple. 
+Notre but absolu : concevoir la fonction F(G) la plus intelligente possible pour que la recherche trouve les contre-exemples TRÈS RAPIDEMENT. Le critère d'évaluation est le temps (coût).
 
 ## Invariants disponibles dans `invariants` (dict)
 
@@ -57,44 +59,36 @@ Un score > 0 signifie que le graphe viole la conjecture : c'est un contre-exempl
 - 'X'           : nom de l'invariant en entrée (ex: 'maximum_degree')
 - 'Y'           : nom de l'invariant cible (ex: 'triangle_number')
 - 'Sign'        : '<=' ou '>='
-- 'Coefficients': liste de coefficients ['c1', 'c2', 'c3'] tels que f(X) = intercept + c1*X + c2*X² + c3*X³
-- 'Intercept'   : constante (fraction string, ex: '-1/6')
-- 'Subgroup'    : classe du graphe (ex: "['connected']", "['claw_free', 'connected']", "['connected', 'tree']")
+- 'Coefficients': liste ['c1', 'c2', 'c3'] tels que f(X) = intercept + c1*X + c2*X² + c3*X³
+- 'Subgroup'    : classe du graphe (ex: "['connected']", "['claw_free']")
 
-## Fonction de base (à améliorer)
-
-La fonction suivante calcule la violation pure. Elle fonctionne mais ne guide pas
-la recherche quand la violation est encore négative (avant de trouver un contre-exemple) :
+## Fonction de base (à remplacer)
 
 ```python
 {baseline}
 ```
+Ton but est de remplacer le `return violation` final par une formule beaucoup plus puissante.
 
-## Ce que tu dois faire
+## 🛑 CONSIGNES CRITIQUES POUR OBTENIR UN BON RATIO (À LIRE ABSOLUMENT) 🛑
 
-Écris une version AMÉLIORÉE de cette fonction qui guide mieux la recherche locale.
-Quelques idées de guidage (bonus/pénalités) à explorer :
+NE TE CONTENTE PAS d'une simple combinaison linéaire type `(10 * violation + 0.3 * diam - 0.2 * n)`. C'est trop basique et les performances stagnent !
 
-- **Amplifier** la violation selon les invariants structurels du graphe
-- **Bonus** si le graphe est dans une zone prometteuse (ex: forte densité pour maximiser les triangles)
-- **Pénalité** pour les graphes trop grands (calculs lents) ou triviaux
-- **Normalisation** par ordre du graphe pour comparer des graphes de tailles différentes
-- **Exploiter la classe** : un graphe claw_free a des contraintes sur ses cliques, un arbre a diamètre = order-1, etc.
-- **Bonus de progression** : si Y(G) est déjà grand par rapport à f(X(G)), amplifier
+POUR GAGNER :
+1. **Utilise des non-linéarités :** 
+   - `math.exp(violation)` pour exploser le score dès qu'on s'approche d'une violation (violation proche de 0).
+   - `math.log(n)` pour pénaliser les très grands graphes de manière douce.
+   - `math.tanh` ou `abs()` ou des carrés `**2` pour les densités.
+2. **Utilise des ratios malins :** `alpha / n`, `Delta / n`, `2*m / (n*(n-1))`, `tau / alpha`. Les invariants bruts dépendent trop de la taille du graphe.
+3. **Exploite la topologie selon les cas :** 
+   - Si un graphe approche la violation, le pousser vers des structures extrêmes aide souvent (ex: densifier via `clique_number`, ou étirer via `diameter`).
+4. **Cible les conjectures difficiles :** Regarde dans le prompt les conjectures qui "échouent" et invente une logique conditionnelle (`if`) ou mathématique pour les résoudre spécifiquement.
 
 ## Contraintes absolues
 
-- Signature exacte : `def score(invariants: dict, conjecture: dict) -> float`
-- Ne jamais retourner float('inf') ou float('nan')
-- Gérer les divisions par zéro et les invariants absents avec `.get(..., 0)`
-- Inclure `from fractions import Fraction` et `import ast` dans le corps de la fonction
-- Le score doit rester > 0 si et seulement si c'est un contre-exemple
-
-## Démarche attendue
-
-1. Analyse brièvement la structure mathématique de la conjecture (≤ ou ≥, linéaire ou polynomiale)
-2. Identifie quels invariants secondaires peuvent indiquer qu'on approche d'une violation
-3. Écris la fonction avec des commentaires expliquant chaque choix
+- Signature exacte : `def heuristic_score(G, invariants: dict, conjecture: dict) -> float`
+- Gérer TOUJOURS les invariants absents ou les divisions par zéro avec `.get(..., 0)` ou des `try/except`
+- Gérer les `math.exp` pour qu'ils ne fassent pas d'OverflowError (clamp avec `min(valeur, 100)` par exemple).
+- Le paramètre G est gardé pour la signature mais tu dois utiliser principalement `invariants`.
 """.format(invariants=INVARIANTS_LIST, baseline=BASELINE_FUNCTION)
 
 
@@ -102,8 +96,7 @@ def build_initial_prompt():
     return SYSTEM_CONTEXT + """
 ## Itération 1 — Première tentative
 
-C'est la première itération. Pars de la fonction de base et propose une amélioration
-originale et bien motivée. Sois créatif sur les bonus/pénalités.
+Propose une fonction `heuristic_score` ultra-créative. Utilise des ratios, des fonctions mathématiques non-linéaires (math.exp, math.log) pour guider le gradient avec force !
 """
 
 
@@ -111,19 +104,12 @@ def build_iteration_prompt(best_functions, failed_conjectures=None):
     """Construit le prompt avec les meilleures fonctions et les conjectures échouées."""
     functions_block = ""
     for i, (code, perf, details) in enumerate(best_functions, start=1):
-        functions_block += f"\n### Fonction {i} — {perf} conjectures réfutées\n"
-        if details:
-            solved = [str(c) for c in details.get('solved', [])]
-            failed = [str(c) for c in details.get('failed', [])]
-            if solved:
-                functions_block += f"Réfutées : {', '.join(solved)}\n"
-            if failed:
-                functions_block += f"Échouées : {', '.join(failed)}\n"
+        functions_block += f"\n### Fonction {i} — Réfutées: {perf}\n"
         functions_block += f"```python\n{code}\n```\n"
 
     failed_block = ""
     if failed_conjectures:
-        failed_block = f"\nConjectures jamais réfutées par aucune fonction : {', '.join(str(c) for c in failed_conjectures)}\n"
+        failed_block = f"\n⚠️ CONJECTURES QUI RÉSISTENT ENCORE : {', '.join(str(c) for c in failed_conjectures)}\nTrouve une structure mathématique radicalement différente pour les atteindre !\n"
 
     return SYSTEM_CONTEXT + f"""
 ## Résultats des itérations précédentes
@@ -131,9 +117,7 @@ def build_iteration_prompt(best_functions, failed_conjectures=None):
 {failed_block}
 
 ## Ta mission
-
-- Identifie ce qui distingue les conjectures réfutées de celles qui ont échoué
-- Propose une NOUVELLE fonction qui corrige les faiblesses observées
-- Tu peux t'inspirer des meilleures fonctions mais tu dois innover sur au moins un point
-- Explique ta démarche avant d'écrire le code
+- Ta précédente fonction était bien, mais trop linéaire !
+- Invente de **nouveaux ratios** ou des **fonctions exponentielles/logarithmiques** pour guider le score de manière non linéaire.
+- Fais baisser le coût temporel global !
 """

@@ -15,8 +15,7 @@ if __name__ == '__main__':
     best_code, best_perf = run_funsearch(benchmark_df)
 
     if best_code:
-        print(f"\nFunSearch terminé. Meilleure performance : {best_perf}/20")
-        print("Tu peux copier la fonction ci-dessus dans heuristique1/search.py")
-        print("pour remplacer violation_score et relancer heuristique1.py.")
+        print(f"\nFunSearch terminé. Meilleur nombre de conjectures réfutées : {best_perf}")
+        print("Tu peux copier la fonction ci-dessus et l'utiliser comme nouvelle heuristique.")
     else:
         print("\nAucune fonction valide trouvée.")
