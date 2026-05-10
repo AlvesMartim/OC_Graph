@@ -1,13 +1,19 @@
-import pandas as pd
+import os
+import sys
 
-from heuristique1 import run_heuristic
+# Ajouter la racine du projet au PYTHONPATH pour pouvoir importer src
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+import pandas as pd
+from src.heuristique1 import run_heuristic
 
 if __name__ == '__main__':
+    benchmark_path = os.path.join(os.path.dirname(__file__), '..', 'benchmark', 'benchmark.xlsx')
     try:
-        benchmark_df = pd.read_excel("benchmark.xlsx")
+        benchmark_df = pd.read_excel(benchmark_path)
         print(f"{len(benchmark_df)} conjectures chargées.\n")
     except FileNotFoundError:
-        print("Erreur : Le fichier 'benchmark.xlsx' est introuvable.")
+        print(f"Erreur : Le fichier '{benchmark_path}' est introuvable.")
         exit()
 
     total = len(benchmark_df)

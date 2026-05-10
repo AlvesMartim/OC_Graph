@@ -1,0 +1,6 @@
+pandas
+networkx
+numpy
+python-dotenv
+google-genai
+openpyxl

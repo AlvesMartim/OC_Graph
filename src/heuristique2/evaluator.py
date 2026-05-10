@@ -3,9 +3,9 @@ import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import pandas as pd
 
-from heuristique1.invariants import compute_invariants
-from heuristique1.repair import repair_if_needed
-from heuristique1.search import generate_initial_graphs, select_candidate, mutate
+from src.heuristique1.invariants import compute_invariants
+from src.heuristique1.repair import repair_if_needed
+from src.heuristique1.search import generate_initial_graphs, select_candidate, mutate
 
 # Durée max par conjecture lors de l'évaluation
 EVAL_TIME_LIMIT = 60
