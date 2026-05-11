@@ -1,3 +1,6 @@
 .env
 __pycache__/
+heuristique1/__pycache__/
+heuristique2/__pycache__/
 *.pyc
+CLAUDE.md

@@ -35,6 +35,81 @@ def _matches_class(G, classes):
     return True
 
 
+def _parametric_families(classes):
+    """Familles paramétriques structurées (n = 8..25) pour étendre l'atlas."""
+    sizes = list(range(8, 26))
+    for n in sizes:
+        yield nx.path_graph(n)
+        yield nx.cycle_graph(n)
+
+        if 'claw_free' not in classes:
+            yield nx.star_graph(n - 1)
+
+        if n <= 12:
+            yield nx.complete_graph(n)
+
+        if 'tree' not in classes and n >= 4:
+            yield nx.wheel_graph(n)
+
+        # Caterpillar : path + feuilles
+        if n >= 6 and 'connected' in classes or 'tree' in classes:
+            for ext in (1, 2):
+                spine = max(3, n - ext * (n // 2))
+                G = nx.path_graph(spine)
+                next_id = spine
+                for v in range(1, spine - 1):
+                    for _ in range(ext):
+                        if next_id >= n:
+                            break
+                        G.add_node(next_id)
+                        G.add_edge(v, next_id)
+                        next_id += 1
+                yield G
+
+        # Double-star
+        if n >= 5:
+            for split in (n // 3, n // 2):
+                a = split
+                b = n - a - 2
+                if a >= 1 and b >= 1:
+                    G = nx.Graph()
+                    G.add_edge(0, 1)
+                    for i in range(a):
+                        G.add_edge(0, 2 + i)
+                    for i in range(b):
+                        G.add_edge(1, 2 + a + i)
+                    yield G
+
+        # Bipartis complets
+        if 'claw_free' not in classes and 'tree' not in classes and n >= 4:
+            for a in (2, 3, n // 2):
+                b = n - a
+                if 1 <= a <= b:
+                    yield nx.complete_bipartite_graph(a, b)
+
+        # Complément d'un chemin (souvent claw_free pour n grand)
+        if n <= 15 and 'tree' not in classes:
+            yield nx.complement(nx.path_graph(n))
+
+        # Petersen
+        if n == 10 and 'tree' not in classes:
+            yield nx.petersen_graph()
+
+    # Trees additionnels par construction (au-delà de nonisomorphic_trees 12)
+    if 'tree' in classes:
+        for n in range(13, 26):
+            # Path
+            yield nx.path_graph(n)
+            # Broom : path attaché à étoile
+            for spine in (3, n // 3, n // 2):
+                if 2 <= spine < n:
+                    leaves = n - spine
+                    G = nx.path_graph(spine)
+                    for i in range(leaves):
+                        G.add_edge(spine - 1, spine + i)
+                    yield G
+
+
 def iter_known_graphs(classes):
     """Itère sur les graphes candidats respectant la classe."""
     for G in nx.graph_atlas_g():
@@ -50,6 +125,12 @@ def iter_known_graphs(classes):
                     yield T
             except Exception:
                 break
+
+    for G in _parametric_families(classes):
+        if G is None or G.number_of_nodes() < 2:
+            continue
+        if _matches_class(G, classes):
+            yield G
 
 
 def try_known_graphs(conjecture, needed, score_fn, time_limit=5.0):

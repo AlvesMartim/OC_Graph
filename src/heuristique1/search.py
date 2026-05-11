@@ -56,14 +56,70 @@ def violation_score(invariants, conjecture):
         return -float('inf')
 
 
+def _random_tree(n):
+    """Compatible NetworkX 2.x / 3.x."""
+    if hasattr(nx, 'random_labeled_tree'):
+        return nx.random_labeled_tree(n)
+    return nx.random_tree(n)
+
+
+def _specialized_seeds(conjecture):
+    """Graphes structurés adaptés à l'invariant Y et au sens de l'inégalité.
+    Retourne une liste de seeds (peut être vide)."""
+    Y = conjecture.get('Y')
+    X = conjecture.get('X')
+    sign = conjecture.get('Sign', '<=')
+    classes = parse_subgroup(conjecture.get('Subgroup', ''))
+    seeds = []
+
+    # Direction : pour Y <= f(X) on veut Y grand ; pour Y >= f(X) on veut Y petit.
+    need_y_small = sign in ('>=', '>')
+    proximity_involved = (Y == 'proximity') or (X == 'proximity')
+
+    if proximity_involved:
+        # proximity petite ↔ hub central (étoile, complet, biparti complet)
+        # proximity grande ↔ étalé (chemin, cycle long)
+        want_small_proximity = (
+            (Y == 'proximity' and need_y_small) or
+            (X == 'proximity' and not need_y_small)
+        )
+        if want_small_proximity:
+            for n in (5, 8, 12, 16):
+                seeds.append(nx.star_graph(n))
+                seeds.append(nx.complete_graph(min(n, 10)))
+                seeds.append(nx.complete_bipartite_graph(2, n))
+                seeds.append(nx.wheel_graph(n))
+        else:
+            for n in (6, 10, 15, 20):
+                seeds.append(nx.path_graph(n))
+                seeds.append(nx.cycle_graph(n))
+            for n in (4, 6, 8):
+                seeds.append(_random_tree(n))
+
+    # Filtre selon la classe
+    valid = []
+    for G in seeds:
+        if 'tree' in classes and not nx.is_tree(G):
+            continue
+        if 'connected' in classes and not nx.is_connected(G):
+            continue
+        if 'claw_free' in classes:
+            from .atlas import is_claw_free
+            if not is_claw_free(G):
+                continue
+        valid.append(G)
+    return valid
+
+
 def generate_initial_graphs(conjecture, num_graphs=10):
     classes = parse_subgroup(conjecture.get('Subgroup', "['connected']"))
-    population = []
-    for _ in range(num_graphs):
+    population = list(_specialized_seeds(conjecture))[:num_graphs]
+
+    while len(population) < num_graphs:
         n = random.randint(4, 15)
         try:
             if 'tree' in classes:
-                G = nx.random_tree(n)
+                G = _random_tree(n)
             elif 'claw_free' in classes:
                 if random.random() < 0.3:
                     G = nx.complete_graph(random.randint(3, 10))
@@ -103,32 +159,75 @@ def _graph_hash(G):
         return None
 
 
+def _describe_mutation(G_before, G_after):
+    """Décrit en texte les changements entre deux graphes."""
+    nodes_before = set(G_before.nodes())
+    nodes_after = set(G_after.nodes())
+    edges_before = set(frozenset(e) for e in G_before.edges())
+    edges_after = set(frozenset(e) for e in G_after.edges())
+
+    parts = []
+    for n in nodes_after - nodes_before:
+        parts.append(f"sommet {n} ajouté")
+    for n in nodes_before - nodes_after:
+        parts.append(f"sommet {n} supprimé")
+    for e in edges_after - edges_before:
+        u, v = tuple(e)
+        parts.append(f"arête ({u},{v}) ajoutée")
+    for e in edges_before - edges_after:
+        u, v = tuple(e)
+        parts.append(f"arête ({u},{v}) supprimée")
+    return ", ".join(parts) if parts else "aucun changement"
+
+
 def _kick_mutate(G, conjecture, n_mutations):
-    """Applique plusieurs mutations consécutives pour échapper aux plateaux."""
+    """Applique plusieurs mutations consécutives ; retourne (graphe, description)."""
     H = G.copy()
+    steps = []
     for _ in range(n_mutations):
+        H_prev = H.copy()
         H = targeted_mutate(H, conjecture)
+        steps.append(_describe_mutation(H_prev, H))
         if H.number_of_nodes() < 2:
             break
-    return H
+    return H, " → ".join(steps)
 
 
-def counterexample_found(G, invariants, conjecture, score, elapsed):
+def counterexample_found(G, invariants, conjecture, score, elapsed, history=None):
+    g6 = nx.to_graph6_bytes(G).decode('ascii').strip()
     print("\n" + "=" * 50)
     print("Contre-exemple trouvé !")
     print(f"Conjecture: {conjecture['Conjecture']}")
-    print(f"Graphe (graph6): {nx.to_graph6_bytes(G).decode('ascii').strip()}")
+    print(f"Graphe (graph6): {g6}")
     print(f"Ordre: {invariants.get('order', 'N/A')}, Taille: {invariants.get('size', 'N/A')}")
     print(f"Invariants: {conjecture['X']}={invariants.get(conjecture['X'], 'N/A')}, "
           f"{conjecture['Y']}={invariants.get(conjecture['Y'], 'N/A')}")
     print(f"Score de violation: {score:.4f}")
     print(f"Temps de réfutation : {elapsed:.2f}s")
+    if history:
+        print(f"\nChemin ({len(history)} étape(s)) :")
+        MAX_STEPS = 10
+        display = history if len(history) <= MAX_STEPS else history[:5] + ["..."] + history[-3:]
+        for i, step in enumerate(display, start=1):
+            prefix = f"  {i}." if step != "..." else "  ..."
+            print(f"{prefix} {step}")
     print("=" * 50 + "\n")
-    return G, elapsed
+
+    info = {
+        "graph6": g6,
+        "order": invariants.get('order'),
+        "size": invariants.get('size'),
+        conjecture['X']: invariants.get(conjecture['X']),
+        conjecture['Y']: invariants.get(conjecture['Y']),
+        "violation_score": round(float(score), 6),
+        "refutation_time_s": round(elapsed, 3),
+        "mutation_path": history or [],
+    }
+    return G, elapsed, info
 
 
 def run_heuristic(conjecture):
-    """Retourne (graphe, durée) si contre-exemple trouvé, sinon (None, 60.0)."""
+    """Retourne (graphe, durée, info) si contre-exemple trouvé, sinon (None, 120.0, None)."""
     start_time = time.time()
     graph_class = conjecture.get('Subgroup')
     needed = required_invariants(conjecture)
@@ -138,22 +237,28 @@ def run_heuristic(conjecture):
                                     time_limit=ATLAS_TIME_BUDGET)
     if atlas_result:
         G, inv, s = atlas_result
-        return counterexample_found(G, inv, conjecture, s, time.time() - start_time)
+        g6 = _graph_hash(G) or "?"
+        G_out, elapsed, info = counterexample_found(G, inv, conjecture, s, time.time() - start_time,
+                                                    history=[f"Graphe de l'atlas ({g6})"])
+        return G_out, elapsed, info
 
     # ---------- Recherche locale avec diversification ----------
-    tabu = set()  # hashes graph6 des graphes déjà visités
+    tabu = set()
     population = generate_initial_graphs(conjecture)
 
+    # scored_pop : liste de (G, score, historique_mutations)
     scored_pop = []
     for G in population:
         inv = compute_invariants(G, needed=needed)
         s = violation_score(inv, conjecture)
+        g6 = _graph_hash(G) or "?"
+        history = [f"Graphe initial ({g6}, {G.number_of_nodes()} sommets, {G.number_of_edges()} arêtes)"]
         if s > 0:
-            return counterexample_found(G, inv, conjecture, s, time.time() - start_time)
-        scored_pop.append((G, s))
-        h = _graph_hash(G)
-        if h:
-            tabu.add(h)
+            G_out, elapsed, info = counterexample_found(G, inv, conjecture, s, time.time() - start_time, history)
+            return G_out, elapsed, info
+        scored_pop.append((G, s, history))
+        if g6 != "?":
+            tabu.add(g6)
 
     scored_pop.sort(key=lambda x: x[1], reverse=True)
     scored_pop = scored_pop[:10]
@@ -161,11 +266,14 @@ def run_heuristic(conjecture):
     stagnation = 0
 
     while time.time() - start_time < 60:
-        G = select_candidate(scored_pop)
+        G, _, parent_history = max(
+            random.sample(scored_pop, min(3, len(scored_pop))),
+            key=lambda x: x[1]
+        )
 
         # Kick mutations : plusieurs mutations consécutives si stagnation
         n_mutations = KICK_SIZE if stagnation > KICK_THRESHOLD else 1
-        H = _kick_mutate(G, conjecture, n_mutations)
+        H, mut_desc = _kick_mutate(G, conjecture, n_mutations)
 
         if graph_class:
             H = repair_if_needed(H, graph_class)
@@ -184,36 +292,42 @@ def run_heuristic(conjecture):
 
         inv = compute_invariants(H, needed=needed)
         score = violation_score(inv, conjecture)
+        new_history = parent_history + [mut_desc]
 
         if score > 0:
-            return counterexample_found(H, inv, conjecture, score, time.time() - start_time)
+            G_out, elapsed, info = counterexample_found(H, inv, conjecture, score,
+                                                        time.time() - start_time, new_history)
+            return G_out, elapsed, info
 
         if score > best_score:
             best_score = score
             stagnation = 0
-            scored_pop.append((H, score))
+            scored_pop.append((H, score, new_history))
             scored_pop.sort(key=lambda x: x[1], reverse=True)
             scored_pop = scored_pop[:10]
         else:
             stagnation += 1
 
-        # Vrai redémarrage : remplacer TOUTE la population (pas juste 5/10)
+        # Vrai redémarrage : remplacer TOUTE la population
         if stagnation > RESTART_THRESHOLD:
             new_pop = generate_initial_graphs(conjecture)
             scored_pop = []
             for G_new in new_pop:
                 inv_new = compute_invariants(G_new, needed=needed)
                 s_new = violation_score(inv_new, conjecture)
+                g6_new = _graph_hash(G_new) or "?"
+                hist_new = [f"Redémarrage — graphe initial ({g6_new}, "
+                            f"{G_new.number_of_nodes()} sommets, {G_new.number_of_edges()} arêtes)"]
                 if s_new > 0:
-                    return counterexample_found(G_new, inv_new, conjecture, s_new,
-                                                time.time() - start_time)
-                scored_pop.append((G_new, s_new))
-                h_new = _graph_hash(G_new)
-                if h_new and len(tabu) < TABU_MAX:
-                    tabu.add(h_new)
+                    G_out, elapsed, info = counterexample_found(G_new, inv_new, conjecture, s_new,
+                                                                time.time() - start_time, hist_new)
+                    return G_out, elapsed, info
+                scored_pop.append((G_new, s_new, hist_new))
+                if g6_new != "?" and len(tabu) < TABU_MAX:
+                    tabu.add(g6_new)
             scored_pop.sort(key=lambda x: x[1], reverse=True)
             scored_pop = scored_pop[:10]
-            best_score = scored_pop[0][1]  # plafond local réinitialisé
+            best_score = scored_pop[0][1]
             stagnation = 0
 
-    return None, 60.0
+    return None, 120.0, None

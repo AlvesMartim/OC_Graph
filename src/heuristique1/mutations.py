@@ -254,6 +254,62 @@ def _decrease_matching(H):
     return _remove_random_edge(H)
 
 
+def _decrease_proximity(H):
+    """Diminue la proximity (min des dist. moy.) : créer un hub central.
+    Connecte le sommet de plus petite distance moyenne à des non-voisins
+    pour le rapprocher de tous, ce qui fait chuter min(avg_dist).
+    """
+    if H.number_of_nodes() < 3 or not nx.is_connected(H):
+        return _add_random_edge(H)
+    try:
+        dist = dict(nx.all_pairs_shortest_path_length(H))
+        n = H.number_of_nodes()
+        avg = {v: sum(dist[v].values()) / (n - 1) for v in H.nodes()}
+        v_hub = min(avg, key=avg.get)
+        non_neighbors = [u for u in H.nodes() if u != v_hub and not H.has_edge(v_hub, u)]
+        if non_neighbors:
+            H.add_edge(v_hub, random.choice(non_neighbors))
+            return H
+    except Exception:
+        pass
+    return _add_random_edge(H)
+
+
+def _increase_proximity(H):
+    """Augmente la proximity : étaler le graphe (chemins longs, sommets pendants éloignés).
+    Retire une arête au "centre" et/ou ajoute un sommet pendant à un sommet excentrique.
+    """
+    if H.number_of_nodes() < 3:
+        return _add_node(H)
+    if H.number_of_nodes() < 30 and random.random() < 0.5:
+        try:
+            if nx.is_connected(H):
+                ecc = nx.eccentricity(H)
+                v_far = max(ecc, key=ecc.get)
+                new_node = max(H.nodes()) + 1
+                H.add_node(new_node)
+                H.add_edge(new_node, v_far)
+                return H
+        except Exception:
+            pass
+    if H.number_of_edges() > H.number_of_nodes():
+        try:
+            dist = dict(nx.all_pairs_shortest_path_length(H))
+            n = H.number_of_nodes()
+            avg = {v: sum(dist[v].values()) / (n - 1) for v in H.nodes()}
+            v_center = min(avg, key=avg.get)
+            neighbors = list(H.neighbors(v_center))
+            if neighbors:
+                u = random.choice(neighbors)
+                H.remove_edge(v_center, u)
+                if nx.is_connected(H):
+                    return H
+                H.add_edge(v_center, u)  # rollback
+        except Exception:
+            pass
+    return _remove_random_edge(H)
+
+
 def _increase_independence(H):
     """Augmente l'indépendance : retirer des arêtes."""
     return _remove_random_edge(H)
@@ -279,7 +335,7 @@ TARGETED = {
     'diameter':              (_increase_diameter,    _decrease_diameter),
     'radius':                (_increase_diameter,    _decrease_diameter),
     'remoteness':            (_increase_diameter,    _decrease_diameter),
-    'proximity':             (_decrease_diameter,    _increase_diameter),
+    'proximity':             (_increase_proximity,   _decrease_proximity),
     'matching_number':       (_increase_matching,    _decrease_matching),
     'independence_number':   (_increase_independence, _decrease_independence),
     'vertex_cover_number':   (_decrease_independence, _increase_independence),
