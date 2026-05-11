@@ -30,11 +30,16 @@ if __name__ == '__main__':
         if result is not None:
             found += 1
         else:
-            print(f"Aucun contre-exemple trouvé (60.00s écoulées)\n")
+            print(f"Aucun contre-exemple trouvé (pénalité : 120s)\n")
 
         print(f">> Progression : {found}/{processed} contre-exemples trouvés\n")
 
+    failures = total - found
+    score = total_time  # succès = temps réel, échecs = 60s chacun
+
     print("=" * 60)
-    print(f"Résultats : {found}/{total} conjectures réfutées")
-    print(f"Temps total : {total_time:.1f}s  |  Temps moyen : {total_time / total:.1f}s")
+    print(f"Résultats   : {found}/{total} conjectures réfutées")
+    print(f"Temps moyen : {total_time / total:.1f}s")
+    print(f"Score total : {score:.1f}s  ({found} réfutées × temps réel + {failures} échecs × 120s)")
+    print(f"             (plus bas = meilleur, minimum théorique = 0s)")
     print("=" * 60)
