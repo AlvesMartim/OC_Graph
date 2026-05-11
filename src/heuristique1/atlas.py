@@ -95,6 +95,17 @@ def _parametric_families(classes):
         if n == 10 and 'tree' not in classes:
             yield nx.petersen_graph()
 
+    # K_n + bras (claw-free, efficace pour density/remoteness et radius/remoteness)
+    if 'tree' not in classes:
+        for n_clique in range(3, 16):
+            for arm_len in range(2, 18):
+                if n_clique + arm_len > 32:
+                    break
+                G = nx.complete_graph(n_clique)
+                for i in range(arm_len):
+                    G.add_edge(n_clique - 1 + i, n_clique + i)
+                yield G
+
     # Trees additionnels par construction (au-delà de nonisomorphic_trees 12)
     if 'tree' in classes:
         for n in range(13, 26):

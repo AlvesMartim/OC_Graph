@@ -75,6 +75,19 @@ def _specialized_seeds(conjecture):
     # Direction : pour Y <= f(X) on veut Y grand ; pour Y >= f(X) on veut Y petit.
     need_y_small = sign in ('>=', '>')
     proximity_involved = (Y == 'proximity') or (X == 'proximity')
+    remoteness_involved = (Y == 'remoteness') or (X == 'remoteness')
+
+    # K_n + bras : claw_free, remoteness basse (min_T élevé car nœuds lointains)
+    # Efficace pour conjonctures density/remoteness et radius/remoteness
+    if remoteness_involved and need_y_small:
+        for n_clique in (5, 8, 10, 14):
+            for arm_len in (5, 8, 10, 14):
+                if n_clique + arm_len > 32:
+                    continue
+                G = nx.complete_graph(n_clique)
+                for i in range(arm_len):
+                    G.add_edge(n_clique - 1 + i, n_clique + i)
+                seeds.append(G)
 
     if proximity_involved:
         # proximity = (n-1)/max_T. PETITE ↔ max_T grand ↔ graphe étalé.
