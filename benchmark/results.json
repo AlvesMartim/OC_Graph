@@ -1,8 +1,8 @@
 {
-  "date": "2026-05-11 16:04:44",
+  "date": "2026-05-11 16:19:36",
   "conjectures_refutees": 99,
   "total_conjectures": 100,
-  "score_total_s": 262.07,
+  "score_total_s": 221.507,
   "results": [
     {
       "conjecture_id": 886,
@@ -14,7 +14,7 @@
         "maximum_degree": 11,
         "triangle_number": 220,
         "violation_score": 0.0,
-        "refutation_time_s": 0.255,
+        "refutation_time_s": 0.216,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<K~~~~~~~~~~~)"
         ]
@@ -30,7 +30,7 @@
         "average_degree": 1.0,
         "clique_number": 2,
         "violation_score": 0.625,
-        "refutation_time_s": 0.072,
+        "refutation_time_s": 0.061,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<A_)"
         ]
@@ -46,7 +46,7 @@
         "average_degree": 1.0,
         "clique_number": 2,
         "violation_score": 0.333333,
-        "refutation_time_s": 0.032,
+        "refutation_time_s": 0.035,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<A_)"
         ]
@@ -62,7 +62,7 @@
         "clique_number": 2,
         "average_degree": 1.0,
         "violation_score": 0.333333,
-        "refutation_time_s": 0.033,
+        "refutation_time_s": 0.037,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<A_)"
         ]
@@ -78,7 +78,7 @@
         "clique_number": 2,
         "average_degree": 1.0,
         "violation_score": 0.2,
-        "refutation_time_s": 0.058,
+        "refutation_time_s": 0.051,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<A_)"
         ]
@@ -94,7 +94,7 @@
         "clique_number": 2,
         "minimum_degree": 6,
         "violation_score": 0.569543,
-        "refutation_time_s": 0.214,
+        "refutation_time_s": 0.209,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<K??F~z{~Fw^_)"
         ]
@@ -104,15 +104,15 @@
       "conjecture_id": 1466,
       "conjecture": "If G is a connected graph, x = domination_number and y = independent_domination_number, then y(G) <= - 51407/7000 + 254/21 * x(G) - 25/7 * x(G)² + 1/3 * x(G)³",
       "counter_example": {
-        "graph6": ">>graph6<<FsaC_",
-        "order": 7,
-        "size": 7,
+        "graph6": ">>graph6<<E|e_",
+        "order": 6,
+        "size": 9,
         "domination_number": 1,
-        "independent_domination_number": 5,
-        "violation_score": 3.486714,
-        "refutation_time_s": 0.095,
+        "independent_domination_number": 3,
+        "violation_score": 1.486714,
+        "refutation_time_s": 0.075,
         "mutation_path": [
-          "Graphe de l'atlas (>>graph6<<FsaC_)"
+          "Graphe de l'atlas (>>graph6<<E|e_)"
         ]
       }
     },
@@ -120,15 +120,15 @@
       "conjecture_id": 1566,
       "conjecture": "If G is a connected graph, x = total_domination_number and y = independence_number, then y(G) >= - 1 + x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<MhCGGC@?G?_@?@_?_",
-        "order": 14,
-        "size": 14,
-        "total_domination_number": 8,
-        "independence_number": 6,
+        "graph6": ">>graph6<<S~CGGC@?G?_@?@??_?G?@??C??G??G??C",
+        "order": 20,
+        "size": 22,
+        "total_domination_number": 10,
+        "independence_number": 8,
         "violation_score": 1.0,
-        "refutation_time_s": 0.256,
+        "refutation_time_s": 0.317,
         "mutation_path": [
-          "Graphe de l'atlas (>>graph6<<MhCGGC@?G?_@?@_?_)"
+          "Graphe de l'atlas (>>graph6<<S~CGGC@?G?_@?@??_?G?@??C??G??G??C)"
         ]
       }
     },
@@ -136,16 +136,17 @@
       "conjecture_id": 1587,
       "conjecture": "If G is a connected graph, x = total_domination_number and y = matching_number, then y(G) >= - 1/3 + 2/3 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<J_OP?o@H?G?",
+        "graph6": ">>graph6<<JAGGCAqO?A?",
         "order": 11,
         "size": 10,
         "total_domination_number": 7,
         "matching_number": 4,
         "violation_score": 0.333333,
-        "refutation_time_s": 4.181,
+        "refutation_time_s": 1.411,
         "mutation_path": [
-          "Redémarrage — graphe initial (>>graph6<<Jc?P?oAX?G?, 11 sommets, 11 arêtes)",
-          "arête (0,3) supprimée → arête (0,1) supprimée → arête (8,6) supprimée → arête (1,9) supprimée"
+          "Redémarrage — graphe initial (>>graph6<<IAGG?aqO?, 10 sommets, 9 arêtes)",
+          "arête (3,7) supprimée",
+          "sommet 10 ajouté, arête (10,7) ajoutée"
         ]
       }
     },
@@ -153,17 +154,17 @@
       "conjecture_id": 1588,
       "conjecture": "If G is a connected graph, x = total_domination_number and y = matching_number, then y(G) >= - 2 + x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<I?`?GOoWO",
+        "graph6": ">>graph6<<Io__Gp??G",
         "order": 10,
         "size": 9,
         "total_domination_number": 7,
         "matching_number": 4,
         "violation_score": 1.0,
-        "refutation_time_s": 0.628,
+        "refutation_time_s": 1.107,
         "mutation_path": [
-          "Graphe initial (>>graph6<<IC`?KOoWO, 10 sommets, 11 arêtes)",
-          "arête (0,3) supprimée",
-          "arête (0,7) supprimée"
+          "Graphe initial (>>graph6<<HOaaGrS, 9 sommets, 12 arêtes)",
+          "sommet 9 ajouté, arête (1,9) ajoutée → arête (8,3) supprimée → arête (0,8) supprimée → arête (8,1) supprimée",
+          "arête (0,5) supprimée → arête (1,9) supprimée → arête (8,5) supprimée → arête (1,6) supprimée"
         ]
       }
     },
@@ -171,16 +172,16 @@
       "conjecture_id": 1600,
       "conjecture": "If G is a connected graph, x = total_domination_number and y = vertex_cover_number, then y(G) >= - 1/3 + 2/3 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<ISOg`?@?G",
-        "order": 10,
-        "size": 9,
+        "graph6": ">>graph6<<KFCC?C?J?B?O",
+        "order": 12,
+        "size": 12,
         "total_domination_number": 7,
         "vertex_cover_number": 4,
         "violation_score": 0.333333,
-        "refutation_time_s": 2.38,
+        "refutation_time_s": 2.424,
         "mutation_path": [
-          "Redémarrage — graphe initial (>>graph6<<I[?g`?@?G, 10 sommets, 9 arêtes)",
-          "arête (1,2) supprimée"
+          "Redémarrage — graphe initial (>>graph6<<JFCC?C?J?B?, 11 sommets, 11 arêtes)",
+          "sommet 11 ajouté, arête (11,6) ajoutée"
         ]
       }
     },
@@ -188,17 +189,16 @@
       "conjecture_id": 1601,
       "conjecture": "If G is a connected graph, x = total_domination_number and y = vertex_cover_number, then y(G) >= - 2 + x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<J?dC?g_CGG?",
-        "order": 11,
-        "size": 10,
+        "graph6": ">>graph6<<IQc?_?BP?",
+        "order": 10,
+        "size": 9,
         "total_domination_number": 7,
         "vertex_cover_number": 4,
         "violation_score": 1.0,
-        "refutation_time_s": 0.792,
+        "refutation_time_s": 0.778,
         "mutation_path": [
-          "Graphe initial (>>graph6<<HGDCGh_, 9 sommets, 9 arêtes)",
-          "arête (1,2) supprimée",
-          "arête (8,1) supprimée → sommet 9 ajouté, arête (9,3) ajoutée → arête (5,6) supprimée → sommet 10 ajouté, arête (10,5) ajoutée"
+          "Graphe initial (>>graph6<<HqD?_OB, 9 sommets, 9 arêtes)",
+          "arête (0,1) supprimée → arête (4,7) supprimée → arête (1,5) supprimée → sommet 9 ajouté, arête (1,9) ajoutée"
         ]
       }
     },
@@ -206,15 +206,15 @@
       "conjecture_id": 1708,
       "conjecture": "If G is a connected graph, x = independence_number and y = total_domination_number, then y(G) <= 1 + x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<VhCGGC@?G?_@?@??_?G?@??C??G??G??C??@???K???_",
-        "order": 23,
-        "size": 23,
-        "independence_number": 10,
-        "total_domination_number": 12,
+        "graph6": ">>graph6<<QhCGGC@?G?_@?@??_?G?@??E??G",
+        "order": 18,
+        "size": 18,
+        "independence_number": 8,
+        "total_domination_number": 10,
         "violation_score": 1.0,
-        "refutation_time_s": 0.369,
+        "refutation_time_s": 0.271,
         "mutation_path": [
-          "Graphe de l'atlas (>>graph6<<VhCGGC@?G?_@?@??_?G?@??C??G??G??C??@???K???_)"
+          "Graphe de l'atlas (>>graph6<<QhCGGC@?G?_@?@??_?G?@??E??G)"
         ]
       }
     },
@@ -228,7 +228,7 @@
         "vertex_cover_number": 1,
         "independent_domination_number": 6,
         "violation_score": 5.0,
-        "refutation_time_s": 0.064,
+        "refutation_time_s": 0.084,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<F??Fw)"
         ]
@@ -238,17 +238,18 @@
       "conjecture_id": 1891,
       "conjecture": "If G is a connected graph, x = vertex_cover_number and y = total_domination_number, then y(G) <= 1/2 + 3/2 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<JAGGGD?gGO?",
+        "graph6": ">>graph6<<JoOOoQ?G??_",
         "order": 11,
         "size": 10,
         "vertex_cover_number": 4,
         "total_domination_number": 7,
         "violation_score": 0.5,
-        "refutation_time_s": 5.39,
+        "refutation_time_s": 0.939,
         "mutation_path": [
-          "Redémarrage — graphe initial (>>graph6<<LCgOGE@GA____?, 13 sommets, 14 arêtes)",
-          "sommet 0 supprimé, arête (0,12) supprimée, arête (0,8) supprimée, arête (0,4) supprimée, arête (0,3) supprimée",
-          "sommet 12 supprimé, arête (11,12) supprimée"
+          "Redémarrage — graphe initial (>>graph6<<Cp, 4 sommets, 3 arêtes)",
+          "sommet 4 ajouté, arête (1,4) ajoutée",
+          "sommet 5 ajouté, arête (3,5) ajoutée → sommet 6 ajouté, arête (3,6) ajoutée → arête (2,3) supprimée → sommet 7 ajouté, arête (4,7) ajoutée",
+          "aucun changement → sommet 8 ajouté, arête (0,8) ajoutée → sommet 9 ajouté, arête (9,2) ajoutée → sommet 10 ajouté, arête (9,10) ajoutée"
         ]
       }
     },
@@ -256,44 +257,12 @@
       "conjecture_id": 2041,
       "conjecture": "If G is a connected graph, x = independent_domination_number and y = matching_number, then y(G) >= 3/4 + 1/4 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<JsaCCA?_C??",
-        "order": 11,
-        "size": 10,
-        "independent_domination_number": 10,
-        "matching_number": 1,
-        "violation_score": 2.25,
-        "refutation_time_s": 0.435,
-        "mutation_path": [
-          "Graphe de l'atlas (>>graph6<<JsaCCA?_C??)"
-        ]
-      }
-    },
-    {
-      "conjecture_id": 2051,
-      "conjecture": "If G is a connected graph, x = independent_domination_number and y = vertex_cover_number, then y(G) >= 3/4 + 1/4 * x(G)",
-      "counter_example": {
-        "graph6": ">>graph6<<F??Fw",
-        "order": 7,
-        "size": 6,
-        "independent_domination_number": 6,
-        "vertex_cover_number": 1,
-        "violation_score": 1.25,
-        "refutation_time_s": 0.064,
-        "mutation_path": [
-          "Graphe de l'atlas (>>graph6<<F??Fw)"
-        ]
-      }
-    },
-    {
-      "conjecture_id": 2117,
-      "conjecture": "If G is a connected graph, x = matching_number and y = independent_domination_number, then y(G) <= - 51407/7000 + 254/21 * x(G) - 25/7 * x(G)² + 1/3 * x(G)³",
-      "counter_example": {
         "graph6": ">>graph6<<D?{",
         "order": 5,
         "size": 4,
-        "matching_number": 1,
         "independent_domination_number": 4,
-        "violation_score": 2.486714,
+        "matching_number": 1,
+        "violation_score": 0.75,
         "refutation_time_s": 0.062,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<D?{)"
@@ -301,19 +270,51 @@
       }
     },
     {
+      "conjecture_id": 2051,
+      "conjecture": "If G is a connected graph, x = independent_domination_number and y = vertex_cover_number, then y(G) >= 3/4 + 1/4 * x(G)",
+      "counter_example": {
+        "graph6": ">>graph6<<HsaCCA?",
+        "order": 9,
+        "size": 8,
+        "independent_domination_number": 8,
+        "vertex_cover_number": 1,
+        "violation_score": 1.75,
+        "refutation_time_s": 0.231,
+        "mutation_path": [
+          "Graphe de l'atlas (>>graph6<<HsaCCA?)"
+        ]
+      }
+    },
+    {
+      "conjecture_id": 2117,
+      "conjecture": "If G is a connected graph, x = matching_number and y = independent_domination_number, then y(G) <= - 51407/7000 + 254/21 * x(G) - 25/7 * x(G)² + 1/3 * x(G)³",
+      "counter_example": {
+        "graph6": ">>graph6<<GsaCC?",
+        "order": 8,
+        "size": 7,
+        "matching_number": 1,
+        "independent_domination_number": 7,
+        "violation_score": 5.486714,
+        "refutation_time_s": 0.364,
+        "mutation_path": [
+          "Graphe de l'atlas (>>graph6<<GsaCC?)"
+        ]
+      }
+    },
+    {
       "conjecture_id": 2120,
       "conjecture": "If G is a connected graph, x = matching_number and y = total_domination_number, then y(G) <= 1/2 + 3/2 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<J?YI_E?C??_",
+        "graph6": ">>graph6<<JQ??goG@C_?",
         "order": 11,
         "size": 10,
         "matching_number": 4,
         "total_domination_number": 7,
         "violation_score": 0.5,
-        "refutation_time_s": 2.795,
+        "refutation_time_s": 6.906,
         "mutation_path": [
-          "Redémarrage — graphe initial (>>graph6<<I?WW_E_A?, 10 sommets, 9 arêtes)",
-          "sommet 10 ajouté, arête (9,10) ajoutée → arête (8,2) supprimée → arête (3,5) supprimée → arête (9,4) supprimée"
+          "Redémarrage — graphe initial (>>graph6<<JCw@@?K@@??, 11 sommets, 10 arêtes)",
+          "sommet 2 supprimé, arête (2,4) supprimée, arête (2,7) supprimée, arête (2,10) supprimée, arête (2,6) supprimée → arête (0,4) supprimée → arête (4,7) ajoutée → sommet 11 ajouté, arête (11,4) ajoutée"
         ]
       }
     },
@@ -321,16 +322,17 @@
       "conjecture_id": 2121,
       "conjecture": "If G is a connected graph, x = matching_number and y = total_domination_number, then y(G) <= 2 + x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<J?HocAGA?C?",
-        "order": 11,
-        "size": 10,
-        "matching_number": 4,
-        "total_domination_number": 7,
+        "graph6": ">>graph6<<LkGO???C[C?O@?",
+        "order": 13,
+        "size": 12,
+        "matching_number": 5,
+        "total_domination_number": 8,
         "violation_score": 1.0,
-        "refutation_time_s": 1.843,
+        "refutation_time_s": 0.713,
         "mutation_path": [
-          "Redémarrage — graphe initial (>>graph6<<J?L_e?GA?@?, 11 sommets, 10 arêtes)",
-          "arête (3,4) supprimée → aucun changement → arête (1,7) supprimée → arête (8,10) supprimée"
+          "Graphe initial (>>graph6<<MkGS??@?BPAE?O?O?, 14 sommets, 16 arêtes)",
+          "arête (8,7) supprimée → arête (10,4) supprimée → sommet 6 supprimé, arête (0,6) supprimée → sommet 10 supprimé, arête (8,10) supprimée, arête (1,10) supprimée, arête (2,10) supprimée",
+          "sommet 14 ajouté, arête (5,14) ajoutée"
         ]
       }
     },
@@ -344,7 +346,7 @@
         "diameter": 1,
         "independent_domination_number": 1,
         "violation_score": 4.0,
-        "refutation_time_s": 0.035,
+        "refutation_time_s": 0.06,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<A_)"
         ]
@@ -354,15 +356,15 @@
       "conjecture_id": 4668,
       "conjecture": "If G is a connected graph, tree, x = vertex_cover_number and y = independent_domination_number, then y(G) <= - 51407/7000 + 254/21 * x(G) - 25/7 * x(G)² + 1/3 * x(G)³",
       "counter_example": {
-        "graph6": ">>graph6<<F??Fw",
-        "order": 7,
-        "size": 6,
+        "graph6": ">>graph6<<CF",
+        "order": 4,
+        "size": 3,
         "vertex_cover_number": 1,
-        "independent_domination_number": 6,
-        "violation_score": 4.486714,
-        "refutation_time_s": 0.062,
+        "independent_domination_number": 3,
+        "violation_score": 1.486714,
+        "refutation_time_s": 0.038,
         "mutation_path": [
-          "Graphe de l'atlas (>>graph6<<F??Fw)"
+          "Graphe de l'atlas (>>graph6<<CF)"
         ]
       }
     },
@@ -386,18 +388,18 @@
       "conjecture_id": 5952,
       "conjecture": "If G is a connected graph, claw_free, x = diameter and y = independence_number, then y(G) <= 2 + x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<P~~~~~~~~g^}~|?_?G??CA??",
-        "order": 17,
-        "size": 75,
+        "graph6": ">>graph6<<K~~wf{CAA?O?",
+        "order": 12,
+        "size": 27,
         "diameter": 3,
         "independence_number": 6,
         "violation_score": 1.0,
-        "refutation_time_s": 22.985,
+        "refutation_time_s": 29.215,
         "mutation_path": [
-          "Redémarrage — graphe initial (>>graph6<<Lt~n~~ZM~GL~R|, 13 sommets, 58 arêtes)",
-          "aucun changement",
-          "sommet 13 ajouté, arête (13,6) ajoutée → arête (10,11) supprimée → sommet 14 ajouté, arête (14,7) ajoutée → sommet 15 ajouté, arête (12,15) ajoutée",
-          "sommet 16 ajouté, arête (16,4) ajoutée"
+          "Redémarrage — graphe initial (>>graph6<<G~~wd{, 8 sommets, 22 arêtes)",
+          "arête (1,2) supprimée → sommet 8 ajouté, arête (8,5) ajoutée → sommet 9 ajouté, arête (9,4) ajoutée → arête (2,5) supprimée",
+          "arête (1,5) supprimée → arête (0,7) supprimée → sommet 10 ajouté, arête (1,10) ajoutée → arête (2,3) supprimée",
+          "sommet 11 ajouté, arête (0,11) ajoutée"
         ]
       }
     },
@@ -411,7 +413,7 @@
         "radius": 4,
         "domination_number": 4,
         "violation_score": 0.486714,
-        "refutation_time_s": 0.135,
+        "refutation_time_s": 0.134,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<GhCGGC)"
         ]
@@ -421,17 +423,16 @@
       "conjecture_id": 5996,
       "conjecture": "If G is a connected graph, claw_free, x = radius and y = total_domination_number, then y(G) <= - 36207/7000 + 218/21 * x(G) - 23/7 * x(G)² + 1/3 * x(G)³",
       "counter_example": {
-        "graph6": ">>graph6<<O~svxkv|~W]~?G?O??G?C",
-        "order": 16,
-        "size": 53,
+        "graph6": ">>graph6<<IDosP?AO?",
+        "order": 10,
+        "size": 11,
         "radius": 3,
         "total_domination_number": 6,
         "violation_score": 0.601,
-        "refutation_time_s": 27.892,
+        "refutation_time_s": 0.86,
         "mutation_path": [
-          "Redémarrage — graphe initial (>>graph6<<L~sfxkv|~W]nrv, 13 sommets, 56 arêtes)",
-          "sommet 13 ajouté, arête (8,13) ajoutée → sommet 14 ajouté, arête (14,7) ajoutée → sommet 12 supprimé, arête (12,7) supprimée, arête (11,12) supprimée, arête (12,5) supprimée, arête (4,12) supprimée, arête (0,12) supprimée, arête (1,12) supprimée, arête (10,12) supprimée, arête (12,6) supprimée, arête (9,12) supprimée → sommet 15 ajouté, arête (14,15) ajoutée",
-          "sommet 16 ajouté, arête (16,13) ajoutée"
+          "Graphe initial (>>graph6<<FDOso, 7 sommets, 8 arêtes)",
+          "sommet 7 ajouté, arête (2,7) ajoutée → sommet 8 ajouté, arête (8,6) ajoutée → arête (3,6) supprimée → sommet 9 ajouté, arête (1,9) ajoutée"
         ]
       }
     },
@@ -439,18 +440,17 @@
       "conjecture_id": 5998,
       "conjecture": "If G is a connected graph, claw_free, x = radius and y = independence_number, then y(G) <= - 19407/7000 + 115/14 * x(G) - 71/28 * x(G)² + 1/4 * x(G)³",
       "counter_example": {
-        "graph6": ">>graph6<<KKOGzA?@?A?A",
-        "order": 12,
-        "size": 13,
-        "radius": 4,
+        "graph6": ">>graph6<<LLewS{JAw@?A_?",
+        "order": 13,
+        "size": 25,
+        "radius": 3,
         "independence_number": 6,
-        "violation_score": 0.486714,
-        "refutation_time_s": 25.144,
+        "violation_score": 0.201,
+        "refutation_time_s": 17.212,
         "mutation_path": [
-          "Redémarrage — graphe initial (>>graph6<<GDA[Z?, 8 sommets, 10 arêtes)",
-          "arête (3,5) supprimée → arête (0,5) supprimée → arête (2,3) supprimée → sommet 8 ajouté, arête (0,8) ajoutée",
-          "arête (0,6) supprimée",
-          "sommet 9 ajouté, arête (9,5) ajoutée → arête (1,5) supprimée → sommet 10 ajouté, arête (10,7) ajoutée → sommet 11 ajouté, arête (9,11) ajoutée"
+          "Redémarrage — graphe initial (>>graph6<<ILa{c{J?g, 10 sommets, 20 arêtes)",
+          "arête (0,6) supprimée → sommet 10 ajouté, arête (8,10) ajoutée → sommet 11 ajouté, arête (9,11) ajoutée → arête (3,6) supprimée",
+          "sommet 12 ajouté, arête (0,12) ajoutée"
         ]
       }
     },
@@ -458,15 +458,15 @@
       "conjecture_id": 6000,
       "conjecture": "If G is a connected graph, claw_free, x = radius and y = independent_domination_number, then y(G) <= - 61407/7000 + 667/42 * x(G) - 155/28 * x(G)² + 7/12 * x(G)³",
       "counter_example": {
-        "graph6": ">>graph6<<HhCGGC@",
-        "order": 9,
-        "size": 8,
+        "graph6": ">>graph6<<GhCGGC",
+        "order": 8,
+        "size": 7,
         "radius": 4,
         "independent_domination_number": 4,
         "violation_score": 0.486714,
-        "refutation_time_s": 0.133,
+        "refutation_time_s": 0.151,
         "mutation_path": [
-          "Graphe de l'atlas (>>graph6<<HhCGGC@)"
+          "Graphe de l'atlas (>>graph6<<GhCGGC)"
         ]
       }
     },
@@ -480,7 +480,7 @@
         "maximum_degree": 5,
         "average_degree": 2.6666666666666665,
         "violation_score": 0.0,
-        "refutation_time_s": 0.116,
+        "refutation_time_s": 0.113,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<N~{GGC@?G?_@?@??_?G)"
         ]
@@ -496,7 +496,7 @@
         "maximum_degree": 4,
         "average_degree": 2.210526315789474,
         "violation_score": 0.011696,
-        "refutation_time_s": 0.138,
+        "refutation_time_s": 0.126,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<R~CGGC@?G?_@?@??_?G?@??C??G??G)"
         ]
@@ -512,7 +512,7 @@
         "maximum_degree": 4,
         "average_degree": 2.210526315789474,
         "violation_score": 0.011696,
-        "refutation_time_s": 0.11,
+        "refutation_time_s": 0.108,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<R~CGGC@?G?_@?@??_?G?@??C??G??G)"
         ]
@@ -528,7 +528,7 @@
         "maximum_degree": 5,
         "average_degree": 2.625,
         "violation_score": 0.016031,
-        "refutation_time_s": 0.139,
+        "refutation_time_s": 0.136,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<O~{GGC@?G?_@?@??_?G?@)"
         ]
@@ -544,7 +544,7 @@
         "average_degree": 2.625,
         "maximum_degree": 5,
         "violation_score": 0.071429,
-        "refutation_time_s": 0.1,
+        "refutation_time_s": 0.127,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<O~{GGC@?G?_@?@??_?G?@)"
         ]
@@ -560,7 +560,7 @@
         "average_degree": 2.210526315789474,
         "maximum_degree": 4,
         "violation_score": 0.026316,
-        "refutation_time_s": 0.129,
+        "refutation_time_s": 0.11,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<R~CGGC@?G?_@?@??_?G?@??C??G??G)"
         ]
@@ -576,7 +576,7 @@
         "average_degree": 2.210526315789474,
         "maximum_degree": 4,
         "violation_score": 0.02276,
-        "refutation_time_s": 0.109,
+        "refutation_time_s": 0.129,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<R~CGGC@?G?_@?@??_?G?@??C??G??G)"
         ]
@@ -592,7 +592,7 @@
         "average_degree": 1.0,
         "clique_number": 2,
         "violation_score": 0.6,
-        "refutation_time_s": 0.058,
+        "refutation_time_s": 0.034,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<A_)"
         ]
@@ -608,7 +608,7 @@
         "average_degree": 2.9473684210526314,
         "clique_number": 6,
         "violation_score": 0.053921,
-        "refutation_time_s": 0.135,
+        "refutation_time_s": 0.15,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<R~~wGC@?G?_@?@??_?G?@??C??G??G)"
         ]
@@ -624,7 +624,7 @@
         "clique_number": 2,
         "average_degree": 1.0,
         "violation_score": 0.333333,
-        "refutation_time_s": 0.062,
+        "refutation_time_s": 0.038,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<A_)"
         ]
@@ -639,16 +639,17 @@
       "conjecture_id": 6582,
       "conjecture": "If G is a connected graph, claw_free, x = total_domination_number and y = matching_number, then y(G) >= - 1 + x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<FcD`?",
+        "graph6": ">>graph6<<FU?i?",
         "order": 7,
         "size": 6,
         "total_domination_number": 5,
         "matching_number": 3,
         "violation_score": 1.0,
-        "refutation_time_s": 1.101,
+        "refutation_time_s": 0.613,
         "mutation_path": [
-          "Graphe initial (>>graph6<<EKco, 6 sommets, 6 arêtes)",
-          "arête (1,2) supprimée → sommet 6 ajouté, arête (2,6) ajoutée → arête (0,4) supprimée → arête (3,5) supprimée"
+          "Graphe initial (>>graph6<<FSnh_, 7 sommets, 11 arêtes)",
+          "arête (2,6) supprimée → arête (0,5) supprimée → arête (3,6) supprimée → arête (3,4) supprimée",
+          "arête (1,6) supprimée → arête (2,4) supprimée → arête (0,4) supprimée → arête (1,5) supprimée"
         ]
       }
     },
@@ -656,16 +657,17 @@
       "conjecture_id": 6903,
       "conjecture": "If G is a connected graph, claw_free, x = matching_number and y = total_domination_number, then y(G) <= 1 + x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<FROGG",
+        "graph6": ">>graph6<<Fk?g_",
         "order": 7,
         "size": 6,
         "matching_number": 3,
         "total_domination_number": 5,
         "violation_score": 1.0,
-        "refutation_time_s": 0.93,
+        "refutation_time_s": 1.306,
         "mutation_path": [
-          "Graphe initial (>>graph6<<CR, 4 sommets, 3 arêtes)",
-          "arête (2,3) supprimée → sommet 4 ajouté, arête (1,4) ajoutée → sommet 5 ajouté, arête (4,5) ajoutée → sommet 6 ajouté, arête (5,6) ajoutée"
+          "Redémarrage — graphe initial (>>graph6<<Fjypg, 7 sommets, 13 arêtes)",
+          "sommet 2 supprimé, arête (2,3) supprimée, arête (1,2) supprimée, arête (2,6) supprimée, arête (2,5) supprimée, arête (2,4) supprimée → arête (3,5) supprimée → arête (0,5) supprimée → sommet 7 ajouté, arête (4,7) ajoutée",
+          "arête (1,4) supprimée"
         ]
       }
     },
@@ -679,7 +681,7 @@
         "density": 0.5,
         "proximity": 0.3076923076923077,
         "violation_score": 0.012569,
-        "refutation_time_s": 0.66,
+        "refutation_time_s": 0.344,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<H~~wGC@)"
         ]
@@ -695,7 +697,7 @@
         "density": 0.25,
         "remoteness": 0.30612244897959184,
         "violation_score": 0.005421,
-        "refutation_time_s": 0.797,
+        "refutation_time_s": 0.329,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<O~~~wC@?G?_@?@??_?G?@)"
         ]
@@ -711,7 +713,7 @@
         "density": 0.5,
         "second_smallest_laplace_eigenvalue": 0.26503401953718597,
         "violation_score": 0.056144,
-        "refutation_time_s": 1.322,
+        "refutation_time_s": 0.982,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<H~~wGC@)"
         ]
@@ -727,7 +729,7 @@
         "average_degree": 5.454545454545454,
         "triangle_number": 0,
         "violation_score": 10.227273,
-        "refutation_time_s": 0.221,
+        "refutation_time_s": 0.184,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<J?B~vrw}Fo?)"
         ]
@@ -743,7 +745,7 @@
         "triangle_number": 0,
         "average_degree": 5.454545454545454,
         "violation_score": 0.454545,
-        "refutation_time_s": 0.277,
+        "refutation_time_s": 0.213,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<J?B~vrw}Fo?)"
         ]
@@ -759,7 +761,7 @@
         "total_domination_number": 4,
         "proximity": 0.20408163265306123,
         "violation_score": 0.010204,
-        "refutation_time_s": 0.395,
+        "refutation_time_s": 0.32,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<J~{GGC@?G?_)"
         ]
@@ -775,7 +777,7 @@
         "independence_number": 6,
         "proximity": 0.15384615384615385,
         "violation_score": 0.006154,
-        "refutation_time_s": 0.54,
+        "refutation_time_s": 0.336,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<LhCGGC@?G?_@?@)"
         ]
@@ -785,15 +787,15 @@
       "conjecture_id": 1793,
       "conjecture": "If G is a connected graph, x = independence_number and y = second_smallest_laplace_eigenvalue, then y(G) >= 247857/776608 - 20663/466926 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<HhCGGC@",
+        "graph6": ">>graph6<<HxCGGC@",
         "order": 9,
-        "size": 8,
+        "size": 9,
         "independence_number": 4,
-        "second_smallest_laplace_eigenvalue": 0.1206147584281832,
-        "violation_score": 0.021525,
-        "refutation_time_s": 0.963,
+        "second_smallest_laplace_eigenvalue": 0.12887509864305746,
+        "violation_score": 0.013265,
+        "refutation_time_s": 0.88,
         "mutation_path": [
-          "Graphe de l'atlas (>>graph6<<HhCGGC@)"
+          "Graphe de l'atlas (>>graph6<<HxCGGC@)"
         ]
       }
     },
@@ -801,16 +803,17 @@
       "conjecture_id": 1892,
       "conjecture": "If G is a connected graph, x = vertex_cover_number and y = total_domination_number, then y(G) <= 2 + x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<IAKc?H?a?",
-        "order": 10,
-        "size": 9,
+        "graph6": ">>graph6<<JH?HQ?@GC?_",
+        "order": 11,
+        "size": 10,
         "vertex_cover_number": 4,
         "total_domination_number": 7,
         "violation_score": 1.0,
-        "refutation_time_s": 1.17,
+        "refutation_time_s": 1.527,
         "mutation_path": [
-          "Redémarrage — graphe initial (>>graph6<<JA?@XAW?Oo?, 11 sommets, 11 arêtes)",
-          "sommet 4 supprimé, arête (10,4) supprimée, arête (4,6) supprimée, arête (8,4) supprimée → sommet 3 supprimé, arête (8,3) supprimée, arête (1,3) supprimée, arête (10,3) supprimée → sommet 11 ajouté, arête (11,6) ajoutée → arête (0,11) ajoutée"
+          "Redémarrage — graphe initial (>>graph6<<JELX?CIG??_, 11 sommets, 13 arêtes)",
+          "sommet 3 supprimé, arête (3,4) supprimée, arête (1,3) supprimée, arête (3,5) supprimée, arête (0,3) supprimée → arête (2,6) supprimée → sommet 11 ajouté, arête (11,4) ajoutée → sommet 12 ajouté, arête (11,12) ajoutée",
+          "arête (1,12) ajoutée → arête (1,5) supprimée → arête (0,2) ajoutée → sommet 0 supprimé, arête (0,2) supprimée, arête (0,5) supprimée"
         ]
       }
     },
@@ -818,20 +821,20 @@
       "conjecture_id": 1917,
       "conjecture": "If G is a connected graph, x = vertex_cover_number and y = proximity, then y(G) >= 57/130 - 9/130 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<JgD?Q@?Ga??",
+        "graph6": ">>graph6<<JhCKCA?_C??",
         "order": 11,
         "size": 10,
         "vertex_cover_number": 3,
         "proximity": 0.2222222222222222,
         "violation_score": 0.008547,
-        "refutation_time_s": 2.838,
+        "refutation_time_s": 0.771,
         "mutation_path": [
-          "Redémarrage — graphe initial (>>graph6<<EhCG, 6 sommets, 5 arêtes)",
-          "sommet 6 ajouté, arête (1,6) ajoutée",
-          "sommet 7 ajouté, arête (5,7) ajoutée",
-          "sommet 8 ajouté, arête (8,1) ajoutée",
-          "arête (3,6) ajoutée → sommet 9 ajouté, arête (1,9) ajoutée → sommet 10 ajouté, arête (10,7) ajoutée → sommet 3 supprimé, arête (3,4) supprimée, arête (3,6) supprimée, arête (2,3) supprimée",
-          "sommet 11 ajouté, arête (1,11) ajoutée"
+          "Graphe initial (>>graph6<<EhCG, 6 sommets, 5 arêtes)",
+          "sommet 6 ajouté, arête (0,6) ajoutée",
+          "sommet 7 ajouté, arête (0,7) ajoutée",
+          "sommet 8 ajouté, arête (0,8) ajoutée",
+          "sommet 9 ajouté, arête (0,9) ajoutée",
+          "sommet 10 ajouté, arête (0,10) ajoutée"
         ]
       }
     },
@@ -839,21 +842,21 @@
       "conjecture_id": 1919,
       "conjecture": "If G is a connected graph, x = vertex_cover_number and y = proximity, then y(G) >= 177/572 - 15/572 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<J@CE?X_?O_?",
-        "order": 11,
-        "size": 10,
-        "vertex_cover_number": 4,
-        "proximity": 0.2,
-        "violation_score": 0.004545,
-        "refutation_time_s": 0.961,
+        "graph6": ">>graph6<<KhCK?GA?O@?C",
+        "order": 12,
+        "size": 11,
+        "vertex_cover_number": 5,
+        "proximity": 0.16923076923076924,
+        "violation_score": 0.009091,
+        "refutation_time_s": 0.665,
         "mutation_path": [
           "Graphe initial (>>graph6<<EhCG, 6 sommets, 5 arêtes)",
           "sommet 6 ajouté, arête (0,6) ajoutée",
           "sommet 7 ajouté, arête (5,7) ajoutée",
-          "sommet 8 ajouté, arête (8,2) ajoutée",
+          "sommet 8 ajouté, arête (8,6) ajoutée",
           "sommet 9 ajouté, arête (9,7) ajoutée",
-          "arête (9,7) supprimée → arête (0,1) supprimée → arête (4,5) supprimée → arête (1,2) supprimée",
-          "sommet 10 ajouté, arête (10,3) ajoutée"
+          "sommet 10 ajouté, arête (8,10) ajoutée",
+          "sommet 11 ajouté, arête (8,11) ajoutée"
         ]
       }
     },
@@ -861,22 +864,20 @@
       "conjecture_id": 2129,
       "conjecture": "If G is a connected graph, x = matching_number and y = proximity, then y(G) >= 57/130 - 9/130 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<JW?Gp?oG@??",
+        "graph6": ">>graph6<<Ji?Y??HOA??",
         "order": 11,
         "size": 10,
         "matching_number": 3,
         "proximity": 0.2222222222222222,
         "violation_score": 0.008547,
-        "refutation_time_s": 5.012,
+        "refutation_time_s": 1.548,
         "mutation_path": [
           "Redémarrage — graphe initial (>>graph6<<EhCG, 6 sommets, 5 arêtes)",
-          "arête (2,3) supprimée → sommet 6 ajouté, arête (4,6) ajoutée → arête (3,4) supprimée → arête (0,1) supprimée",
-          "sommet 7 ajouté, arête (3,7) ajoutée",
-          "arête (3,7) supprimée",
-          "arête (0,1) ajoutée → arête (0,1) supprimée → aucun changement → sommet 8 ajouté, arête (8,3) ajoutée",
-          "sommet 9 ajouté, arête (9,2) ajoutée",
-          "arête (1,3) supprimée",
-          "sommet 10 ajouté, arête (2,10) ajoutée"
+          "arête (2,3) supprimée",
+          "sommet 6 ajouté, arête (1,6) ajoutée",
+          "sommet 7 ajouté, arête (3,7) ajoutée → sommet 8 ajouté, arête (8,7) ajoutée → sommet 9 ajouté, arête (8,9) ajoutée → arête (8,9) supprimée",
+          "arête (9,4) supprimée",
+          "arête (3,7) supprimée → arête (1,5) supprimée → sommet 10 ajouté, arête (1,10) ajoutée → arête (3,4) supprimée"
         ]
       }
     },
@@ -884,20 +885,19 @@
       "conjecture_id": 2131,
       "conjecture": "If G is a connected graph, x = matching_number and y = proximity, then y(G) >= 177/572 - 15/572 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<JhCK?GC?__?",
-        "order": 11,
-        "size": 10,
-        "matching_number": 4,
-        "proximity": 0.2,
-        "violation_score": 0.004545,
-        "refutation_time_s": 0.877,
+        "graph6": ">>graph6<<KhCK?GA?O@@?",
+        "order": 12,
+        "size": 11,
+        "matching_number": 5,
+        "proximity": 0.1746031746031746,
+        "violation_score": 0.003719,
+        "refutation_time_s": 0.785,
         "mutation_path": [
           "Graphe initial (>>graph6<<EhCG, 6 sommets, 5 arêtes)",
           "sommet 6 ajouté, arête (0,6) ajoutée",
           "sommet 7 ajouté, arête (5,7) ajoutée",
-          "sommet 8 ajouté, arête (8,5) ajoutée",
-          "sommet 9 ajouté, arête (9,6) ajoutée",
-          "sommet 10 ajouté, arête (10,3) ajoutée"
+          "sommet 8 ajouté, arête (8,6) ajoutée → sommet 9 ajouté, arête (9,7) ajoutée → sommet 10 ajouté, arête (8,10) ajoutée → arête (8,10) supprimée",
+          "sommet 11 ajouté, arête (11,4) ajoutée"
         ]
       }
     },
@@ -905,27 +905,26 @@
       "conjecture_id": 2252,
       "conjecture": "If G is a connected graph, x = randic_index and y = total_domination_number, then y(G) <= 6929257/963766 + 1308631/631598 * x(G) - 72533/159523 * x(G)² + 18001/599095 * x(G)³",
       "counter_example": {
-        "graph6": ">>graph6<<NGGGkO`R??_@?GO???G",
-        "order": 15,
-        "size": 17,
-        "randic_index": 7.139446526433959,
-        "total_domination_number": 10,
-        "violation_score": 0.259515,
-        "refutation_time_s": 0.501,
+        "graph6": ">>graph6<<Rb@R__?WIGNQ?O?AC??O???_?_?G??",
+        "order": 19,
+        "size": 27,
+        "randic_index": 8.632723990074645,
+        "total_domination_number": 11,
+        "violation_score": 0.478252,
+        "refutation_time_s": 0.326,
         "mutation_path": [
-          "Graphe initial (>>graph6<<IGiGkwoRO, 10 sommets, 17 arêtes)",
-          "sommet 10 ajouté, arête (9,10) ajoutée",
-          "arête (3,7) supprimée",
-          "arête (9,7) supprimée",
-          "arête (8,7) ajoutée",
-          "sommet 11 ajouté, arête (10,11) ajoutée",
-          "sommet 12 ajouté, arête (8,12) ajoutée",
-          "arête (5,7) supprimée",
-          "sommet 13 ajouté, arête (1,13) ajoutée",
-          "sommet 14 ajouté, arête (13,14) ajoutée",
-          "arête (0,5) supprimée",
-          "arête (8,3) supprimée",
-          "arête (0,4) supprimée"
+          "Graphe initial (>>graph6<<Mb?Ab_W?A?aAO_ZQ?, 14 sommets, 22 arêtes)",
+          "sommet 14 ajouté, arête (8,14) ajoutée",
+          "sommet 15 ajouté, arête (12,15) ajoutée",
+          "sommet 11 supprimé, arête (9,11) supprimée, arête (11,3) supprimée",
+          "sommet 16 ajouté, arête (16,2) ajoutée",
+          "sommet 17 ajouté, arête (17,5) ajoutée",
+          "arête (2,10) ajoutée",
+          "sommet 4 supprimé, arête (8,4) supprimée, arête (4,13) supprimée",
+          "sommet 18 ajouté, arête (18,14) ajoutée",
+          "sommet 19 ajouté, arête (9,19) ajoutée",
+          "arête (3,13) ajoutée",
+          "sommet 20 ajouté, arête (20,6) ajoutée"
         ]
       }
     },
@@ -933,15 +932,15 @@
       "conjecture_id": 2882,
       "conjecture": "If G is a connected graph, x = second_zagreb_index and y = independent_domination_number, then y(G) <= 17/12 + 1/12 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<D?{",
-        "order": 5,
-        "size": 4,
-        "second_zagreb_index": 16,
-        "independent_domination_number": 4,
-        "violation_score": 1.25,
-        "refutation_time_s": 0.033,
+        "graph6": ">>graph6<<F??Fw",
+        "order": 7,
+        "size": 6,
+        "second_zagreb_index": 36,
+        "independent_domination_number": 6,
+        "violation_score": 1.583333,
+        "refutation_time_s": 0.058,
         "mutation_path": [
-          "Graphe de l'atlas (>>graph6<<D?{)"
+          "Graphe de l'atlas (>>graph6<<F??Fw)"
         ]
       }
     },
@@ -965,23 +964,23 @@
       "conjecture_id": 3157,
       "conjecture": "If G is a connected graph, x = proximity and y = matching_number, then y(G) >= 59/5 - 572/15 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<JhD?OD??O?_",
+        "graph6": ">>graph6<<JgCSOGCG?G?",
         "order": 11,
         "size": 10,
         "proximity": 0.19230769230769232,
         "matching_number": 4,
         "violation_score": 0.466667,
-        "refutation_time_s": 1.045,
+        "refutation_time_s": 0.889,
         "mutation_path": [
           "Graphe initial (>>graph6<<EhCG, 6 sommets, 5 arêtes)",
+          "arête (2,3) supprimée",
+          "sommet 6 ajouté, arête (0,6) ajoutée",
+          "arête (1,5) supprimée",
           "arête (4,5) supprimée",
-          "sommet 6 ajouté, arête (1,6) ajoutée",
-          "arête (1,6) supprimée",
-          "sommet 7 ajouté, arête (6,7) ajoutée",
-          "sommet 8 ajouté, arête (8,3) ajoutée",
-          "sommet 9 ajouté, arête (1,9) ajoutée",
-          "arête (8,3) supprimée",
-          "sommet 10 ajouté, arête (10,7) ajoutée → arête (1,9) supprimée → arête (10,7) supprimée → arête (6,7) supprimée"
+          "sommet 7 ajouté, arête (5,7) ajoutée",
+          "sommet 8 ajouté, arête (8,5) ajoutée",
+          "sommet 9 ajouté, arête (9,2) ajoutée",
+          "sommet 10 ajouté, arête (10,5) ajoutée"
         ]
       }
     },
@@ -989,21 +988,21 @@
       "conjecture_id": 3191,
       "conjecture": "If G is a connected graph, x = proximity and y = vertex_cover_number, then y(G) >= 19/3 - 130/9 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<JhCO__OC?_?",
+        "graph6": ">>graph6<<Ji_G?L?OA??",
         "order": 11,
         "size": 10,
-        "proximity": 0.29411764705882354,
-        "vertex_cover_number": 2,
-        "violation_score": 0.084967,
-        "refutation_time_s": 1.231,
+        "proximity": 0.2222222222222222,
+        "vertex_cover_number": 3,
+        "violation_score": 0.123457,
+        "refutation_time_s": 1.111,
         "mutation_path": [
-          "Redémarrage — graphe initial (>>graph6<<EhCG, 6 sommets, 5 arêtes)",
-          "sommet 6 ajouté, arête (3,6) ajoutée",
-          "arête (4,5) supprimée",
-          "sommet 7 ajouté, arête (3,7) ajoutée",
-          "sommet 8 ajouté, arête (8,3) ajoutée",
-          "sommet 9 ajouté, arête (9,3) ajoutée",
-          "sommet 10 ajouté, arête (10,3) ajoutée"
+          "Graphe initial (>>graph6<<EhCG, 6 sommets, 5 arêtes)",
+          "sommet 6 ajouté, arête (5,6) ajoutée",
+          "arête (0,1) supprimée → arête (2,3) supprimée → sommet 7 ajouté, arête (3,7) ajoutée → arête (5,6) supprimée",
+          "arête (2,5) supprimée",
+          "sommet 8 ajouté, arête (8,1) ajoutée",
+          "arête (3,7) supprimée → arête (4,5) supprimée → sommet 9 ajouté, arête (1,9) ajoutée → arête (1,7) supprimée",
+          "arête (5,6) supprimée → arête (4,6) supprimée → arête (3,4) supprimée → sommet 10 ajouté, arête (1,10) ajoutée"
         ]
       }
     },
@@ -1011,22 +1010,24 @@
       "conjecture_id": 3193,
       "conjecture": "If G is a connected graph, x = proximity and y = vertex_cover_number, then y(G) >= 59/5 - 572/15 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<JYGGG?P?OG?",
+        "graph6": ">>graph6<<J__oJ?A?G@?",
         "order": 11,
         "size": 10,
         "proximity": 0.2,
         "vertex_cover_number": 4,
         "violation_score": 0.173333,
-        "refutation_time_s": 2.162,
+        "refutation_time_s": 0.792,
         "mutation_path": [
-          "Redémarrage — graphe initial (>>graph6<<EhCG, 6 sommets, 5 arêtes)",
+          "Graphe initial (>>graph6<<EhCG, 6 sommets, 5 arêtes)",
           "arête (2,3) supprimée",
-          "sommet 6 ajouté, arête (3,6) ajoutée",
-          "arête (3,4) supprimée",
+          "sommet 6 ajouté, arête (1,6) ajoutée",
           "sommet 7 ajouté, arête (1,7) ajoutée",
-          "arête (1,7) supprimée",
-          "arête (0,6) supprimée → arête (3,6) supprimée → sommet 8 ajouté, arête (8,6) ajoutée → arête (4,7) supprimée",
-          "sommet 9 ajouté, arête (9,7) ajoutée → arête (8,6) supprimée → arête (0,1) supprimée → sommet 10 ajouté, arête (10,5) ajoutée"
+          "arête (1,3) supprimée",
+          "sommet 8 ajouté, arête (8,6) ajoutée",
+          "arête (1,6) supprimée",
+          "sommet 9 ajouté, arête (9,5) ajoutée → arête (4,5) supprimée → arête (3,6) supprimée → arête (8,6) supprimée",
+          "arête (9,5) supprimée → arête (9,6) supprimée → arête (8,1) supprimée → arête (3,5) supprimée",
+          "arête (3,4) supprimée → sommet 10 ajouté, arête (10,4) ajoutée → arête (10,4) supprimée → arête (1,2) supprimée"
         ]
       }
     },
@@ -1034,26 +1035,26 @@
       "conjecture_id": 3368,
       "conjecture": "If G is a connected graph, x = remoteness and y = matching_number, then y(G) >= 502194/27901 - 61269445/912567 * x(G) + 30839049/348815 * x(G)² - 5569307/141716 * x(G)³",
       "counter_example": {
-        "graph6": ">>graph6<<RXOG?K@?G?_@?@??_?G?A??O?@??A?",
-        "order": 19,
-        "size": 18,
-        "remoteness": 0.2465753424657534,
-        "matching_number": 6,
-        "violation_score": 0.230326,
-        "refutation_time_s": 2.112,
+        "graph6": ">>graph6<<TPWa?C@?G?_@?@????G?@??c??_?@??@???_",
+        "order": 21,
+        "size": 20,
+        "remoteness": 0.20618556701030927,
+        "matching_number": 7,
+        "violation_score": 0.570002,
+        "refutation_time_s": 2.726,
         "mutation_path": [
-          "Graphe initial (>>graph6<<N~{GGC@?G?_@?@??_?G, 15 sommets, 20 arêtes)",
-          "arête (0,4) supprimée",
-          "arête (1,4) supprimée",
-          "sommet 15 ajouté, arête (11,15) ajoutée",
-          "sommet 16 ajouté, arête (16,13) ajoutée",
-          "arête (11,15) supprimée",
-          "arête (2,4) supprimée",
-          "sommet 17 ajouté, arête (17,13) ajoutée",
-          "sommet 18 ajouté, arête (18,13) ajoutée",
-          "arête (0,3) supprimée",
+          "Redémarrage — graphe initial (>>graph6<<R~{GGC@?G?_@?@??_?G?@??C??G??G, 19 sommets, 24 arêtes)",
+          "sommet 13 supprimé, arête (13,14) supprimée, arête (12,13) supprimée → arête (5,6) supprimée → arête (1,2) supprimée → arête (9,10) supprimée",
+          "arête (17,18) supprimée",
+          "arête (0,1) supprimée",
           "arête (1,3) supprimée",
-          "arête (5,6) supprimée → arête (0,1) supprimée → arête (4,5) supprimée → arête (3,4) supprimée"
+          "arête (4,5) supprimée",
+          "sommet 19 ajouté, arête (19,15) ajoutée",
+          "sommet 20 ajouté, arête (20,15) ajoutée",
+          "arête (0,4) supprimée",
+          "sommet 21 ajouté, arête (21,15) ajoutée",
+          "arête (3,4) supprimée",
+          "arête (0,3) supprimée"
         ]
       }
     },
@@ -1061,23 +1062,22 @@
       "conjecture_id": 3384,
       "conjecture": "If G is a connected graph, x = remoteness and y = vertex_cover_number, then y(G) >= 502194/27901 - 61269445/912567 * x(G) + 30839049/348815 * x(G)² - 5569307/141716 * x(G)³",
       "counter_example": {
-        "graph6": ">>graph6<<OcCGGC`???c@?C?CO?C??",
+        "graph6": ">>graph6<<OPCGGC@?G?_@O@??c???C",
         "order": 16,
         "size": 15,
         "remoteness": 0.25,
         "vertex_cover_number": 6,
         "violation_score": 0.125856,
-        "refutation_time_s": 2.065,
+        "refutation_time_s": 2.537,
         "mutation_path": [
           "Redémarrage — graphe initial (>>graph6<<N~{GGC@?G?_@?@??_?G, 15 sommets, 20 arêtes)",
-          "arête (2,3) supprimée",
-          "arête (3,4) supprimée",
+          "arête (1,3) supprimée",
+          "arête (1,4) supprimée",
+          "sommet 15 ajouté, arête (3,15) ajoutée",
+          "sommet 2 supprimé, arête (2,4) supprimée, arête (0,2) supprimée, arête (2,3) supprimée, arête (1,2) supprimée",
           "arête (0,4) supprimée",
-          "arête (2,4) supprimée",
-          "sommet 15 ajouté, arête (1,15) ajoutée",
-          "sommet 0 supprimé, arête (0,1) supprimée, arête (0,2) supprimée, arête (0,3) supprimée",
-          "arête (13,14) supprimée → arête (1,3) supprimée → sommet 16 ajouté, arête (16,1) ajoutée → arête (9,10) supprimée",
-          "arête (12,13) supprimée"
+          "arête (0,1) supprimée",
+          "sommet 16 ajouté, arête (16,13) ajoutée"
         ]
       }
     },
@@ -1085,41 +1085,32 @@
       "conjecture_id": 3550,
       "conjecture": "If G is a connected graph, x = largest_eigenvalue and y = triangle_number, then y(G) <= 5306234/359925 + 3381239/769239 * x(G) - 156301/129798 * x(G)² + 193839/770395 * x(G)³",
       "counter_example": {
-        "graph6": ">>graph6<<NffX@F{GuxZdisGue^G",
-        "order": 15,
-        "size": 55,
-        "largest_eigenvalue": 7.552935893641935,
-        "triangle_number": 88,
-        "violation_score": 0.341578,
-        "refutation_time_s": 0.733,
+        "graph6": ">>graph6<<LKZ{jYUZSlQtZO",
+        "order": 13,
+        "size": 41,
+        "largest_eigenvalue": 6.661128319283507,
+        "triangle_number": 65,
+        "violation_score": 0.043059,
+        "refutation_time_s": 1.484,
         "mutation_path": [
-          "Graphe initial (>>graph6<<NDaH?Eo?qHO?i_?eACG, 15 sommets, 26 arêtes)",
-          "arête (13,7) ajoutée → arête (10,14) ajoutée → arête (11,3) ajoutée → arête (8,11) ajoutée",
-          "arête (9,2) ajoutée",
-          "arête (2,7) ajoutée",
-          "arête (8,1) ajoutée",
-          "arête (2,13) ajoutée",
-          "arête (10,4) ajoutée",
-          "arête (0,10) ajoutée",
-          "arête (9,12) ajoutée",
-          "arête (12,7) ajoutée",
-          "arête (8,4) ajoutée",
-          "arête (2,14) ajoutée",
-          "arête (12,13) ajoutée",
-          "arête (8,5) ajoutée",
-          "arête (10,11) ajoutée",
-          "arête (10,3) ajoutée",
-          "arête (1,3) ajoutée",
-          "arête (0,1) ajoutée",
+          "Redémarrage — graphe initial (>>graph6<<KK??JYCGOl?T, 12 sommets, 18 arêtes)",
+          "arête (8,6) ajoutée",
           "arête (11,5) ajoutée",
-          "arête (11,4) ajoutée",
-          "arête (3,5) ajoutée",
-          "arête (1,5) ajoutée",
-          "arête (14,7) ajoutée",
-          "arête (3,4) ajoutée",
-          "arête (9,14) ajoutée",
-          "arête (6,14) ajoutée",
-          "arête (1,11) ajoutée"
+          "arête (8,3) ajoutée",
+          "arête (1,9) ajoutée",
+          "arête (0,10) ajoutée",
+          "arête (9,4) ajoutée",
+          "arête (1,4) ajoutée",
+          "arête (2,4) ajoutée",
+          "arête (1,5) ajoutée → arête (2,5) ajoutée → arête (4,5) ajoutée → arête (3,6) ajoutée",
+          "arête (9,5) ajoutée",
+          "arête (11,3) ajoutée",
+          "arête (0,11) ajoutée",
+          "arête (0,6) ajoutée",
+          "sommet 12 ajouté, arête (12,7) ajoutée → arête (0,5) ajoutée → arête (4,12) ajoutée → arête (1,12) ajoutée",
+          "arête (12,5) ajoutée",
+          "arête (2,12) ajoutée",
+          "arête (3,5) ajoutée"
         ]
       }
     },
@@ -1133,7 +1124,7 @@
         "second_smallest_laplace_eigenvalue": 0.41305679034560183,
         "average_degree": 11.625,
         "violation_score": 0.731585,
-        "refutation_time_s": 0.919,
+        "refutation_time_s": 0.876,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<O~~~~~~~~~~~~~~~_?G?@)"
         ]
@@ -1149,7 +1140,7 @@
         "second_smallest_laplace_eigenvalue": 0.09788696740969276,
         "independence_number": 5,
         "violation_score": 0.0,
-        "refutation_time_s": 0.819,
+        "refutation_time_s": 0.701,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<IhCGGC@?G)"
         ]
@@ -1165,7 +1156,7 @@
         "diameter": 3,
         "second_smallest_laplace_eigenvalue": 0.16242478645730524,
         "violation_score": 0.006563,
-        "refutation_time_s": 1.135,
+        "refutation_time_s": 0.916,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<TsaCCA?_C?O?O?O?G?A??O?@??A??A??@???)"
         ]
@@ -1181,7 +1172,7 @@
         "proximity": 1.0,
         "remoteness": 1.0,
         "violation_score": 0.478469,
-        "refutation_time_s": 0.072,
+        "refutation_time_s": 0.062,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<A_)"
         ]
@@ -1191,21 +1182,25 @@
       "conjecture_id": 5421,
       "conjecture": "If G is a connected graph, tree, x = remoteness and y = domination_number, then y(G) >= 2448218/179061 - 35078239/654252 * x(G) + 68742285/912389 * x(G)² - 34991613/988898 * x(G)³",
       "counter_example": {
-        "graph6": ">>graph6<<NSPO?E?A_CO??_?_O??",
-        "order": 15,
-        "size": 14,
-        "remoteness": 0.3181818181818182,
+        "graph6": ">>graph6<<OAIAS?`_A?G?O?O?O?C??",
+        "order": 16,
+        "size": 15,
+        "remoteness": 0.3125,
         "domination_number": 3,
-        "violation_score": 0.100858,
-        "refutation_time_s": 3.957,
+        "violation_score": 0.195486,
+        "refutation_time_s": 4.374,
         "mutation_path": [
-          "Redémarrage — graphe initial (>>graph6<<JS`??M?A_@?, 11 sommets, 10 arêtes)",
-          "arête (0,4) supprimée → arête (5,7) supprimée → arête (10,5) ajoutée → sommet 10 supprimé, arête (8,10) supprimée, arête (10,5) supprimée",
-          "sommet 10 ajouté, arête (10,6) ajoutée → sommet 11 ajouté, arête (11,6) ajoutée → sommet 10 supprimé, arête (10,6) supprimée → aucun changement",
-          "sommet 12 ajouté, arête (0,12) ajoutée",
-          "sommet 13 ajouté, arête (13,6) ajoutée",
-          "sommet 14 ajouté, arête (6,14) ajoutée",
-          "sommet 15 ajouté, arête (0,15) ajoutée"
+          "Redémarrage — graphe initial (>>graph6<<J?CoAGAo_@?, 11 sommets, 10 arêtes)",
+          "arête (0,6) ajoutée",
+          "sommet 8 supprimé, arête (8,10) supprimée, arête (8,6) supprimée",
+          "sommet 3 supprimé, arête (3,4) supprimée, arête (3,5) supprimée",
+          "sommet 11 ajouté, arête (2,11) ajoutée → arête (10,5) ajoutée → arête (1,9) supprimée → arête (4,6) ajoutée",
+          "arête (4,6) supprimée → sommet 12 ajouté, arête (1,12) ajoutée → arête (2,11) supprimée → arête (0,11) ajoutée",
+          "sommet 13 ajouté, arête (1,13) ajoutée",
+          "sommet 14 ajouté, arête (1,14) ajoutée",
+          "sommet 15 ajouté, arête (1,15) ajoutée",
+          "sommet 16 ajouté, arête (0,16) ajoutée",
+          "sommet 17 ajouté, arête (0,17) ajoutée"
         ]
       }
     },
@@ -1219,7 +1214,7 @@
         "diameter": 7,
         "proximity": 0.22857142857142856,
         "violation_score": 0.004297,
-        "refutation_time_s": 0.152,
+        "refutation_time_s": 0.181,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<HxCGGC@)"
         ]
@@ -1235,7 +1230,7 @@
         "diameter": 7,
         "second_smallest_laplace_eigenvalue": 0.12887509864305746,
         "violation_score": 0.007055,
-        "refutation_time_s": 0.316,
+        "refutation_time_s": 0.315,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<HxCGGC@)"
         ]
@@ -1251,7 +1246,7 @@
         "radius": 4,
         "remoteness": 0.375,
         "violation_score": 0.016304,
-        "refutation_time_s": 0.176,
+        "refutation_time_s": 0.177,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<IxCGGC@?G)"
         ]
@@ -1267,7 +1262,7 @@
         "radius": 4,
         "remoteness": 0.375,
         "violation_score": 0.002364,
-        "refutation_time_s": 0.168,
+        "refutation_time_s": 0.203,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<IxCGGC@?G)"
         ]
@@ -1283,7 +1278,7 @@
         "radius": 4,
         "second_smallest_laplace_eigenvalue": 0.10288001874368033,
         "violation_score": 0.007818,
-        "refutation_time_s": 0.313,
+        "refutation_time_s": 0.299,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<IxCGGC@?G)"
         ]
@@ -1293,19 +1288,17 @@
       "conjecture_id": 6124,
       "conjecture": "If G is a connected graph, claw_free, x = density and y = remoteness, then y(G) <= 17/59 + 378/295 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<J~`?_cG?_A?",
-        "order": 11,
-        "size": 14,
-        "density": 0.2545454545454545,
-        "remoteness": 0.625,
-        "violation_score": 0.010701,
-        "refutation_time_s": 0.513,
+        "graph6": ">>graph6<<H~aG_G_",
+        "order": 9,
+        "size": 12,
+        "density": 0.3333333333333333,
+        "remoteness": 0.7272727272727273,
+        "violation_score": 0.012018,
+        "refutation_time_s": 0.308,
         "mutation_path": [
-          "Graphe initial (>>graph6<<FJ|@G, 7 sommets, 10 arêtes)",
-          "sommet 7 ajouté, arête (0,7) ajoutée",
-          "arête (5,6) supprimée",
-          "sommet 8 ajouté, arête (8,7) ajoutée → sommet 9 ajouté, arête (9,5) ajoutée → sommet 10 ajouté, arête (0,10) ajoutée → sommet 11 ajouté, arête (8,11) ajoutée",
-          "sommet 0 supprimé, arête (0,7) supprimée, arête (0,4) supprimée, arête (0,10) supprimée"
+          "Graphe initial (>>graph6<<F~aG_, 7 sommets, 10 arêtes)",
+          "sommet 7 ajouté, arête (5,7) ajoutée",
+          "sommet 8 ajouté, arête (8,2) ajoutée"
         ]
       }
     },
@@ -1319,7 +1312,7 @@
         "average_degree": 5.142857142857143,
         "maximum_degree": 11,
         "violation_score": 0.029458,
-        "refutation_time_s": 0.159,
+        "refutation_time_s": 0.156,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<[~~~~~~~~~_@?@??_?G?@??C??G??G??C??@???G???_??@???@????_???G???@)"
         ]
@@ -1335,7 +1328,7 @@
         "clique_number": 7,
         "maximum_degree": 11,
         "violation_score": 0.598403,
-        "refutation_time_s": 0.148,
+        "refutation_time_s": 0.115,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<LUzvvz}~v~^}~})"
         ]
@@ -1351,7 +1344,7 @@
         "triangle_number": 84,
         "largest_eigenvalue": 8.198251059035456,
         "violation_score": 0.072392,
-        "refutation_time_s": 0.141,
+        "refutation_time_s": 0.153,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<JUzvvz}~v~?)"
         ]
@@ -1367,7 +1360,7 @@
         "triangle_number": 84,
         "largest_eigenvalue": 8.198251059035456,
         "violation_score": 0.08498,
-        "refutation_time_s": 0.181,
+        "refutation_time_s": 0.121,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<JUzvvz}~v~?)"
         ]
@@ -1383,7 +1376,7 @@
         "total_domination_number": 4,
         "second_smallest_laplace_eigenvalue": 0.12887509864305746,
         "violation_score": 0.023366,
-        "refutation_time_s": 0.295,
+        "refutation_time_s": 0.285,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<HxCGGC@)"
         ]
@@ -1399,7 +1392,7 @@
         "first_zagreb_index": 314,
         "second_zagreb_index": 852,
         "violation_score": 13.923077,
-        "refutation_time_s": 0.122,
+        "refutation_time_s": 0.12,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<S~~~wC@?G?_@?@??_?G?@??C??G??G??C)"
         ]
@@ -1415,7 +1408,7 @@
         "first_zagreb_index": 738,
         "second_zagreb_index": 3025,
         "violation_score": 64.533333,
-        "refutation_time_s": 0.072,
+        "refutation_time_s": 0.129,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<JUzvvz}~v~?)"
         ]
@@ -1431,7 +1424,7 @@
         "first_zagreb_index": 322,
         "second_zagreb_index": 860,
         "violation_score": 5.666667,
-        "refutation_time_s": 0.143,
+        "refutation_time_s": 0.128,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<U~~~wC@?G?_@?@??_?G?@??C??G??G??C??@???G)"
         ]
@@ -1447,7 +1440,7 @@
         "first_zagreb_index": 322,
         "second_zagreb_index": 860,
         "violation_score": 9.0,
-        "refutation_time_s": 0.121,
+        "refutation_time_s": 0.144,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<U~~~wC@?G?_@?@??_?G?@??C??G??G??C??@???G)"
         ]
@@ -1463,7 +1456,7 @@
         "largest_eigenvalue": 8.198251059035456,
         "triangle_number": 84,
         "violation_score": 3.277298,
-        "refutation_time_s": 0.142,
+        "refutation_time_s": 0.121,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<JUzvvz}~v~?)"
         ]
@@ -1479,7 +1472,7 @@
         "largest_eigenvalue": 8.198251059035456,
         "triangle_number": 84,
         "violation_score": 2.909547,
-        "refutation_time_s": 0.118,
+        "refutation_time_s": 0.147,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<JUzvvz}~v~?)"
         ]
@@ -1495,7 +1488,7 @@
         "largest_distance_eigenvalue": 25.98273762138878,
         "proximity": 0.22857142857142856,
         "violation_score": 0.001926,
-        "refutation_time_s": 0.168,
+        "refutation_time_s": 0.142,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<HxCGGC@)"
         ]
@@ -1511,7 +1504,7 @@
         "largest_distance_eigenvalue": 32.50980942989507,
         "proximity": 0.20454545454545456,
         "violation_score": 0.001116,
-        "refutation_time_s": 0.143,
+        "refutation_time_s": 0.171,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<IxCGGC@?G)"
         ]
@@ -1527,7 +1520,7 @@
         "largest_distance_eigenvalue": 27.742189319152175,
         "second_smallest_laplace_eigenvalue": 0.1206147584281832,
         "violation_score": 0.0,
-        "refutation_time_s": 0.269,
+        "refutation_time_s": 0.243,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<HhCGGC@)"
         ]
@@ -1543,7 +1536,7 @@
         "second_smallest_laplace_eigenvalue": 0.12887509864305746,
         "diameter": 7,
         "violation_score": 0.2796,
-        "refutation_time_s": 0.288,
+        "refutation_time_s": 0.321,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<HxCGGC@)"
         ]
@@ -1559,7 +1552,7 @@
         "second_smallest_laplace_eigenvalue": 0.17745033054854198,
         "diameter": 5,
         "violation_score": 0.016625,
-        "refutation_time_s": -0.399,
+        "refutation_time_s": 0.349,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<I~~wGC@?G)"
         ]
@@ -1575,7 +1568,7 @@
         "second_smallest_laplace_eigenvalue": 0.17745033054854198,
         "diameter": 5,
         "violation_score": 0.171821,
-        "refutation_time_s": 0.322,
+        "refutation_time_s": 0.371,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<I~~wGC@?G)"
         ]
@@ -1591,7 +1584,7 @@
         "second_smallest_laplace_eigenvalue": 0.14874385649069122,
         "radius": 3,
         "violation_score": 0.250581,
-        "refutation_time_s": 0.342,
+        "refutation_time_s": 0.32,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<H~CGGC@)"
         ]
@@ -1607,7 +1600,7 @@
         "second_smallest_laplace_eigenvalue": 0.16671700823775631,
         "radius": 3,
         "violation_score": 0.0,
-        "refutation_time_s": 0.275,
+        "refutation_time_s": 0.324,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<GxCGGC)"
         ]
@@ -1623,7 +1616,7 @@
         "second_smallest_laplace_eigenvalue": 0.15046616535646734,
         "maximum_degree": 12,
         "violation_score": 0.036272,
-        "refutation_time_s": 0.386,
+        "refutation_time_s": 0.385,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<O~~~~~~~~~~~?@??_?G?@)"
         ]
@@ -1639,7 +1632,7 @@
         "second_smallest_laplace_eigenvalue": 0.41538610191782094,
         "average_degree": 10.666666666666666,
         "violation_score": 0.012375,
-        "refutation_time_s": 0.392,
+        "refutation_time_s": 0.412,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<N~~~~~~~~~~~~~??_?G)"
         ]
@@ -1649,27 +1642,25 @@
       "conjecture_id": 7743,
       "conjecture": "If G is a connected graph, claw_free, x = second_smallest_laplace_eigenvalue and y = domination_number, then y(G) >= 3187508/714301 - 13077165/989881 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<I`Kx}?`_?",
+        "graph6": ">>graph6<<IKdcsu_O?",
         "order": 10,
         "size": 16,
-        "second_smallest_laplace_eigenvalue": 0.1753141823674055,
+        "second_smallest_laplace_eigenvalue": 0.1753141823674076,
         "domination_number": 2,
         "violation_score": 0.146367,
-        "refutation_time_s": 2.586,
+        "refutation_time_s": 0.963,
         "mutation_path": [
-          "Redémarrage — graphe initial (>>graph6<<Cv, 4 sommets, 5 arêtes)",
-          "sommet 4 ajouté, arête (3,4) ajoutée",
+          "Graphe initial (>>graph6<<CL, 4 sommets, 3 arêtes)",
+          "sommet 4 ajouté, arête (0,4) ajoutée",
+          "sommet 5 ajouté, arête (4,5) ajoutée",
           "arête (2,3) supprimée",
-          "sommet 5 ajouté, arête (0,5) ajoutée",
+          "sommet 6 ajouté, arête (1,6) ajoutée",
           "arête (0,3) supprimée",
-          "arête (2,3) supprimée",
-          "sommet 6 ajouté, arête (5,6) ajoutée",
-          "sommet 1 supprimé, arête (0,1) supprimée, arête (1,3) supprimée, arête (1,2) supprimée",
-          "sommet 7 ajouté, arête (3,7) ajoutée",
-          "sommet 8 ajouté, arête (8,3) ajoutée",
+          "sommet 7 ajouté, arête (0,7) ajoutée",
+          "sommet 8 ajouté, arête (0,8) ajoutée",
           "sommet 9 ajouté, arête (0,9) ajoutée",
-          "sommet 10 ajouté, arête (10,3) ajoutée",
-          "arête (9,2) ajoutée → arête (8,7) supprimée → sommet 11 ajouté, arête (0,11) ajoutée → sommet 5 supprimé, arête (5,6) supprimée, arête (2,5) supprimée, arête (0,5) supprimée"
+          "sommet 2 supprimé, arête (2,3) supprimée, arête (1,2) supprimée → arête (9,3) ajoutée → arête (4,6) supprimée → arête (8,4) supprimée",
+          "sommet 10 ajouté, arête (1,10) ajoutée"
         ]
       }
     },
@@ -1683,7 +1674,7 @@
         "second_smallest_laplace_eigenvalue": 0.12887509864305746,
         "total_domination_number": 4,
         "violation_score": 0.319649,
-        "refutation_time_s": 0.257,
+        "refutation_time_s": 0.269,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<HxCGGC@)"
         ]
@@ -1693,15 +1684,15 @@
       "conjecture_id": 7773,
       "conjecture": "If G is a connected graph, claw_free, x = second_smallest_laplace_eigenvalue and y = independent_domination_number, then y(G) >= 3187508/714301 - 13077165/989881 * x(G)",
       "counter_example": {
-        "graph6": ">>graph6<<J~{GGC@?G?_",
-        "order": 11,
-        "size": 16,
-        "second_smallest_laplace_eigenvalue": 0.10539341391755874,
-        "independent_domination_number": 3,
-        "violation_score": 0.07008,
-        "refutation_time_s": 0.309,
+        "graph6": ">>graph6<<I~~wGC@?G",
+        "order": 10,
+        "size": 19,
+        "second_smallest_laplace_eigenvalue": 0.17745033054854198,
+        "independent_domination_number": 2,
+        "violation_score": 0.118147,
+        "refutation_time_s": 0.337,
         "mutation_path": [
-          "Graphe de l'atlas (>>graph6<<J~{GGC@?G?_)"
+          "Graphe de l'atlas (>>graph6<<I~~wGC@?G)"
         ]
       }
     },
@@ -1715,7 +1706,7 @@
         "second_smallest_laplace_eigenvalue": 0.41538610191782094,
         "largest_eigenvalue": 12.006490176769232,
         "violation_score": 0.383619,
-        "refutation_time_s": 0.419,
+        "refutation_time_s": 0.423,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<N~~~~~~~~~~~~~??_?G)"
         ]
@@ -1731,7 +1722,7 @@
         "second_smallest_laplace_eigenvalue": 0.1206147584281832,
         "largest_distance_eigenvalue": 27.742189319152175,
         "violation_score": 0.0,
-        "refutation_time_s": 0.263,
+        "refutation_time_s": 0.266,
         "mutation_path": [
           "Graphe de l'atlas (>>graph6<<HhCGGC@)"
         ]
