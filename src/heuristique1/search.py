@@ -77,24 +77,42 @@ def _specialized_seeds(conjecture):
     proximity_involved = (Y == 'proximity') or (X == 'proximity')
 
     if proximity_involved:
-        # proximity petite ↔ hub central (étoile, complet, biparti complet)
-        # proximity grande ↔ étalé (chemin, cycle long)
-        want_small_proximity = (
-            (Y == 'proximity' and need_y_small) or
-            (X == 'proximity' and not need_y_small)
-        )
-        if want_small_proximity:
-            for n in (5, 8, 12, 16):
-                seeds.append(nx.star_graph(n))
-                seeds.append(nx.complete_graph(min(n, 10)))
-                seeds.append(nx.complete_bipartite_graph(2, n))
-                seeds.append(nx.wheel_graph(n))
-        else:
-            for n in (6, 10, 15, 20):
-                seeds.append(nx.path_graph(n))
-                seeds.append(nx.cycle_graph(n))
-            for n in (4, 6, 8):
-                seeds.append(_random_tree(n))
+        # proximity = (n-1)/max_T. PETITE ↔ max_T grand ↔ graphe étalé.
+        #                          GRANDE ↔ max_T petit ↔ graphe compact.
+        # On inclut les deux types : la direction utile dépend du signe du coefficient.
+
+        # Compacts : haute proximity
+        for n in (6, 10, 14, 20):
+            seeds.append(nx.complete_graph(min(n, 12)))
+            seeds.append(nx.complete_bipartite_graph(max(2, n // 3), n - max(2, n // 3)))
+
+        # Étalés : basse proximity (chemins, cycles)
+        for n in (6, 10, 15, 20, 25):
+            seeds.append(nx.path_graph(n))
+            seeds.append(nx.cycle_graph(n))
+
+        # Double-stars TRÈS DÉSÉQUILIBRÉES : a feuilles d'un côté, 1 de l'autre.
+        # Donne total_dom=2 et proximity ≈ 1/3 pour a grand.
+        for n_total in (8, 11, 15, 20, 25):
+            for b in (1, 2):
+                a = n_total - 2 - b
+                if a >= 2:
+                    G = nx.Graph()
+                    G.add_edge(0, 1)
+                    for i in range(a):
+                        G.add_edge(0, 2 + i)
+                    for i in range(b):
+                        G.add_edge(1, 2 + a + i)
+                    seeds.append(G)
+
+        # Brooms (chemin + étoile à un bout) : aussi total_dom petit et étalé
+        for n_total in (8, 12, 18):
+            for spine in (3, 4, 5):
+                if spine < n_total:
+                    G = nx.path_graph(spine)
+                    for i in range(n_total - spine):
+                        G.add_edge(spine - 1, spine + i)
+                    seeds.append(G)
 
     # Filtre selon la classe
     valid = []

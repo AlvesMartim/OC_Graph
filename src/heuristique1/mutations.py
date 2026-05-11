@@ -255,59 +255,63 @@ def _decrease_matching(H):
 
 
 def _decrease_proximity(H):
-    """Diminue la proximity (min des dist. moy.) : créer un hub central.
-    Connecte le sommet de plus petite distance moyenne à des non-voisins
-    pour le rapprocher de tous, ce qui fait chuter min(avg_dist).
-    """
-    if H.number_of_nodes() < 3 or not nx.is_connected(H):
-        return _add_random_edge(H)
-    try:
-        dist = dict(nx.all_pairs_shortest_path_length(H))
-        n = H.number_of_nodes()
-        avg = {v: sum(dist[v].values()) / (n - 1) for v in H.nodes()}
-        v_hub = min(avg, key=avg.get)
-        non_neighbors = [u for u in H.nodes() if u != v_hub and not H.has_edge(v_hub, u)]
-        if non_neighbors:
-            H.add_edge(v_hub, random.choice(non_neighbors))
-            return H
-    except Exception:
-        pass
-    return _add_random_edge(H)
-
-
-def _increase_proximity(H):
-    """Augmente la proximity : étaler le graphe (chemins longs, sommets pendants éloignés).
-    Retire une arête au "centre" et/ou ajoute un sommet pendant à un sommet excentrique.
+    """Diminue proximity = (n-1)/max_T : ÉTALER le graphe (augmenter max_T).
+    Ajoute un sommet pendant attaché au sommet le plus éloigné (transmission max).
     """
     if H.number_of_nodes() < 3:
         return _add_node(H)
-    if H.number_of_nodes() < 30 and random.random() < 0.5:
+    if H.number_of_nodes() < 30 and random.random() < 0.6:
         try:
             if nx.is_connected(H):
-                ecc = nx.eccentricity(H)
-                v_far = max(ecc, key=ecc.get)
+                dist = dict(nx.all_pairs_shortest_path_length(H))
+                T = {v: sum(dist[v].values()) for v in H.nodes()}
+                v_far = max(T, key=T.get)
                 new_node = max(H.nodes()) + 1
                 H.add_node(new_node)
                 H.add_edge(new_node, v_far)
                 return H
         except Exception:
             pass
-    if H.number_of_edges() > H.number_of_nodes():
+    # Sinon : retirer une arête près du centre pour étirer
+    if H.number_of_edges() > H.number_of_nodes() - 1:
         try:
             dist = dict(nx.all_pairs_shortest_path_length(H))
-            n = H.number_of_nodes()
-            avg = {v: sum(dist[v].values()) / (n - 1) for v in H.nodes()}
-            v_center = min(avg, key=avg.get)
+            T = {v: sum(dist[v].values()) for v in H.nodes()}
+            v_center = min(T, key=T.get)
             neighbors = list(H.neighbors(v_center))
             if neighbors:
                 u = random.choice(neighbors)
                 H.remove_edge(v_center, u)
                 if nx.is_connected(H):
                     return H
-                H.add_edge(v_center, u)  # rollback
+                H.add_edge(v_center, u)
         except Exception:
             pass
     return _remove_random_edge(H)
+
+
+def _increase_proximity(H):
+    """Augmente proximity = (n-1)/max_T : COMPACTER (réduire max_T).
+    Connecte le sommet de transmission max à un non-voisin proche du centre.
+    """
+    if H.number_of_nodes() < 3 or not nx.is_connected(H):
+        return _add_random_edge(H)
+    try:
+        dist = dict(nx.all_pairs_shortest_path_length(H))
+        T = {v: sum(dist[v].values()) for v in H.nodes()}
+        v_far = max(T, key=T.get)
+        v_center = min(T, key=T.get)
+        if v_far != v_center and not H.has_edge(v_far, v_center):
+            H.add_edge(v_far, v_center)
+            return H
+        non_neighbors = [u for u in H.nodes() if u != v_far and not H.has_edge(v_far, u)]
+        if non_neighbors:
+            non_neighbors.sort(key=lambda u: T[u])
+            H.add_edge(v_far, non_neighbors[0])
+            return H
+    except Exception:
+        pass
+    return _add_random_edge(H)
 
 
 def _increase_independence(H):

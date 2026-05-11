@@ -129,16 +129,18 @@ def compute_invariants(G, needed=None):
                 if need('largest_distance_eigenvalue'):
                     invariants['largest_distance_eigenvalue'] = float(np.max(np.linalg.eigvalsh(dist)))
                 if need('proximity') or need('remoteness'):
-                    avg_dists = dist.mean(axis=1)
-                    invariants['proximity'] = float(np.min(avg_dists))
-                    invariants['remoteness'] = float(np.max(avg_dists))
+                    transmissions = dist.sum(axis=1)
+                    max_T = float(np.max(transmissions))
+                    min_T = float(np.min(transmissions))
+                    invariants['proximity'] = (n - 1) / max_T if max_T > 0 else 0.0
+                    invariants['remoteness'] = (n - 1) / min_T if min_T > 0 else 0.0
             else:
                 if need('largest_distance_eigenvalue'):
                     invariants['largest_distance_eigenvalue'] = float('inf')
                 if need('proximity'):
-                    invariants['proximity'] = float('inf')
+                    invariants['proximity'] = 0.0
                 if need('remoteness'):
-                    invariants['remoteness'] = float('inf')
+                    invariants['remoteness'] = 0.0
 
         # ------ Combinatoire ------
         if need('triangle_number'):
