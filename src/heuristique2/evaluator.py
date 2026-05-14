@@ -2,122 +2,100 @@ import random
 import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import pandas as pd
+import ast
 
 from src.heuristique1.invariants import compute_invariants
 from src.heuristique1.repair import repair_if_needed
-from src.heuristique1.search import generate_initial_graphs, select_candidate, mutate
+from src.heuristique1.search import generate_initial_graphs, select_candidate, violation_score, targeted_mutate
 
-# Durée max par conjecture lors de l'évaluation
 EVAL_TIME_LIMIT = 60
-# Taille du sous-ensemble de conjectures pour l'évaluation
-EVAL_SUBSET_SIZE = 25
+EVAL_SUBSET_SIZE = 100
 
+class ConjectureWrapper:
+    def __init__(self, conjecture_dict):
+        self.conjecture_dict = conjecture_dict
 
-def load_score_function(code):
-    """Compile et retourne la fonction score depuis le code Python fourni, ou None si invalide."""
+    def violation(self, invariants):
+        return violation_score(invariants, self.conjecture_dict)
+
+def load_heuristic_score(code):
     namespace = {}
     try:
-        exec(compile(code, '<llm_score>', 'exec'), namespace)
-        fn = namespace.get('heuristic_score')
-        if callable(fn):
-            return fn
+        # Avoid import errors within the exec scope by providing a safe global
+        exec(code, {'abs': abs}, namespace)
+        return namespace.get('heuristic_score', None)
     except Exception as e:
-        print(f"[Evaluator] Fonction invalide : {e}")
+        print(f"[Evaluator] Erreur chargement fonction de score: {e}")
     return None
 
-
-def _search_with_score(conjecture_tuple, score_fn_code, time_limit=EVAL_TIME_LIMIT):
-    """
-    Wrapper pour la recherche locale, conçu pour être exécuté dans un processus séparé.
-    Prend un tuple de conjecture et le code de la fonction de score pour éviter les problèmes de pickling.
-    """
-    # Re-créer la fonction de score dans le processus enfant
-    score_fn = load_score_function(score_fn_code)
-    if score_fn is None:
-        return False, time_limit, conjecture_tuple[0] # Conjecture ID
-
+def _search_with_heuristic(conjecture_tuple, score_code, time_limit=EVAL_TIME_LIMIT):
+    heuristic_score_fn = load_heuristic_score(score_code)
     conjecture = pd.Series(conjecture_tuple[1]).to_dict()
     cid = conjecture['Conjecture ID']
+    
+    # Define needed invariants to compute
+    needed = {conjecture.get('X'), conjecture.get('Y')} - {None}
+    # Pre-compute names needed by the heuristic
+    needed.update({"n", "m", "delta", "Delta", "diam", "gamma", "alpha", "tau", "triangles"})
+
+    if heuristic_score_fn is None:
+        return False, time_limit, cid
+
     start = time.time()
-    graph_class = conjecture.get('Subgroup')
+    
+    subgroup_str = conjecture.get('Subgroup', '')
 
     population = generate_initial_graphs(conjecture)
     scored_pop = []
-    for G in population:
-        inv = compute_invariants(G)
-        try:
-            s = float(score_fn(G, inv, conjecture))
-        except Exception:
-            s = -float('inf')
-            
-        # La condition de succès est généralement testée par rapport à la conjecture directement
-        # mais ici on assume que le score reflète la violation si > 0 pour l'exemple (à voir avec votre projet)
-        try:
-           from fractions import Fraction
-           import ast
-           X_val = float(inv.get(conjecture['X'], 0))
-           Y_val = float(inv.get(conjecture['Y'], 0))
-           coeffs_raw = conjecture.get('Coefficients', '')
-           intercept_raw = str(conjecture.get('Intercept', 0))
-           try:
-               coeffs = ast.literal_eval(coeffs_raw) if isinstance(coeffs_raw, str) else coeffs_raw
-               intercept = float(Fraction(intercept_raw))
-               f_X = intercept + sum(float(Fraction(c)) * (X_val ** (i + 1)) for i, c in enumerate(coeffs))
-           except Exception:
-               f_X = float(conjecture.get('Degree', 1)) * X_val
-           if conjecture['Sign'] in ('<=', '<'):
-               violation = Y_val - f_X
-           else:
-               violation = f_X - Y_val
-               
-           if violation > 0:
-               return True, time.time() - start, cid
-        except Exception:
-            pass
+    
+    wrapper = ConjectureWrapper(conjecture)
 
-        scored_pop.append((G, s))
+    for G in population:
+        inv = compute_invariants(G, needed=needed)
+        v_score = violation_score(inv, conjecture)
+        if v_score > 0:
+            return True, time.time() - start, cid
+        
+        try:
+            h_score = heuristic_score_fn(G, inv, wrapper)
+        except Exception:
+            h_score = v_score
+            
+        scored_pop.append((G, h_score, v_score))
 
     scored_pop.sort(key=lambda x: x[1], reverse=True)
     scored_pop = scored_pop[:10]
     stagnation = 0
 
     while time.time() - start < time_limit:
-        G = select_candidate(scored_pop)
-        H = mutate(G)
+        k = min(3, len(scored_pop))
+        tournament = random.sample(scored_pop, k)
+        G = max(tournament, key=lambda x: x[1])[0]
+        
+        H = targeted_mutate(G, conjecture)
 
-        if graph_class:
-            H = repair_if_needed(H, graph_class)
+        if subgroup_str:
+            H = repair_if_needed(H, subgroup_str)
 
         if H.number_of_nodes() < 2:
+            stagnation += 1
             continue
 
-        inv = compute_invariants(H)
+        inv = compute_invariants(H, needed=needed)
+        v_score = violation_score(inv, conjecture)
+        
+        if v_score > 0:
+            return True, time.time() - start, cid
+            
         try:
-            s = float(score_fn(H, inv, conjecture))
+            h_score = heuristic_score_fn(H, inv, wrapper)
         except Exception:
-            s = -float('inf')
-
-        try:
-           X_val = float(inv.get(conjecture['X'], 0))
-           Y_val = float(inv.get(conjecture['Y'], 0))
-           try:
-               f_X = intercept + sum(float(Fraction(c)) * (X_val ** (i + 1)) for i, c in enumerate(coeffs))
-           except Exception:
-               f_X = float(conjecture.get('Degree', 1)) * X_val
-           if conjecture['Sign'] in ('<=', '<'):
-               violation = Y_val - f_X
-           else:
-               violation = f_X - Y_val
-               
-           if violation > 0:
-               return True, time.time() - start, cid
-        except Exception:
-            pass
+            h_score = v_score
 
         best = scored_pop[0][1] if scored_pop else -float('inf')
-        if s > best:
+        if h_score > best:
             stagnation = 0
-            scored_pop.append((H, s))
+            scored_pop.append((H, h_score, v_score))
             scored_pop.sort(key=lambda x: x[1], reverse=True)
             scored_pop = scored_pop[:10]
         else:
@@ -125,73 +103,57 @@ def _search_with_score(conjecture_tuple, score_fn_code, time_limit=EVAL_TIME_LIM
 
         if stagnation > 200:
             for G_new in generate_initial_graphs(conjecture, num_graphs=3):
-                inv_new = compute_invariants(G_new)
+                inv_new = compute_invariants(G_new, needed=needed)
+                v_new = violation_score(inv_new, conjecture)
+                if v_new > 0:
+                    return True, time.time() - start, cid
                 try:
-                    s_new = float(score_fn(G_new, inv_new, conjecture))
+                    h_new = heuristic_score_fn(G_new, inv_new, wrapper)
                 except Exception:
-                    s_new = -float('inf')
-                
-                try:
-                   X_val = float(inv_new.get(conjecture['X'], 0))
-                   Y_val = float(inv_new.get(conjecture['Y'], 0))
-                   try:
-                       f_X = intercept + sum(float(Fraction(c)) * (X_val ** (i + 1)) for i, c in enumerate(coeffs))
-                   except Exception:
-                       f_X = float(conjecture.get('Degree', 1)) * X_val
-                   if conjecture['Sign'] in ('<=', '<'):
-                       violation = Y_val - f_X
-                   else:
-                       violation = f_X - Y_val
-                       
-                   if violation > 0:
-                       return True, time.time() - start, cid
-                except Exception:
-                    pass
-
-                scored_pop.append((G_new, s_new))
+                    h_new = v_new
+                scored_pop.append((G_new, h_new, v_new))
             scored_pop.sort(key=lambda x: x[1], reverse=True)
             scored_pop = scored_pop[:10]
             stagnation = 0
 
     return False, time_limit, cid
 
-
-def evaluate(code, benchmark_df, subset_size=EVAL_SUBSET_SIZE):
-    """
-    Évalue une fonction de score sur un sous-ensemble aléatoire du benchmark en parallèle.
-    Retourne (nb_réfutées, details) où details = {'solved': [...], 'failed': [...]}.
-    La métrique de performance devient maintenant le "coût" (somme des temps).
-    """
-    score_fn = load_score_function(code)
-    if score_fn is None:
+def evaluate(score_code, benchmark_df, subset_size=EVAL_SUBSET_SIZE):
+    heuristic_score_fn = load_heuristic_score(score_code)
+    if heuristic_score_fn is None:
+        print("[Evaluator] Erreur: Fonction de score invalide, évaluation annulée.")
         return 0, {'solved': [], 'failed': [], 'cost': 120 * subset_size}
 
-    subset = benchmark_df.sample(n=min(subset_size, len(benchmark_df)), random_state=random.randint(0, 9999))
+    subset = benchmark_df.head(subset_size)
     solved, failed = [], []
     total_cost = 0
 
-    tasks = [(row_tuple, code) for row_tuple in subset.iterrows()]
+    tasks = [(row_tuple, score_code) for row_tuple in subset.iterrows()]
+    print(f"  - Lancement de {len(tasks)} tâches d'évaluation en parallèle...")
 
     with ProcessPoolExecutor() as executor:
-        futures = [executor.submit(_search_with_score, task[0], task[1]) for task in tasks]
+        futures = {executor.submit(_search_with_heuristic, task[0], task[1]): task[0][1]['Conjecture ID'] for task in tasks}
         
         for future in as_completed(futures):
+            cid = futures[future]
             try:
-                success, elapsed, cid = future.result()
-                
+                success, elapsed, res_cid = future.result()
+
                 if success:
                     status = "OK"
-                    solved.append(cid)
+                    solved.append(res_cid)
                     cost = elapsed
                 else:
                     status = "--"
-                    failed.append(cid)
-                    cost = 120 # Pénalité de non-réfutation
+                    failed.append(res_cid)
+                    cost = 120
                     
                 total_cost += cost
-                print(f"  [{status}] Conjecture {cid} ({elapsed:.1f}s) -> Cost: {cost:.1f}")
-                
+                print(f"    [{status}] Conjecture {res_cid} ({elapsed:.1f}s) -> Coût: {cost:.1f}")
+
             except Exception as e:
-                print(f"Une erreur est survenue dans un processus enfant : {e}")
+                print(f"    [ERREUR] La tâche pour la conjecture {cid} a échoué : {e}")
+                failed.append(cid)
+                total_cost += 120
 
     return len(solved), {'solved': sorted(solved), 'failed': sorted(failed), 'cost': total_cost}
