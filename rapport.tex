@@ -1,0 +1,541 @@
+\documentclass[12pt,a4paper]{article}
+
+% ---- Encodage et langue ----
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% ---- Mise en page ----
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% ---- Typographie ----
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% ---- Mathématiques ----
+\usepackage{amsmath, amssymb, amsthm}
+
+% ---- Algorithmique ----
+\usepackage[ruled,vlined,linesnumbered,french]{algorithm2e}
+
+% ---- Graphiques et tableaux ----
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+
+% ---- Liens et méta-données ----
+\usepackage[colorlinks=true, linkcolor=blue!70!black, urlcolor=blue!70!black,
+            citecolor=green!50!black]{hyperref}
+
+% ---- Code source ----
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{gray!10},
+  keywordstyle=\color{blue},
+  commentstyle=\color{green!50!black},
+  stringstyle=\color{red!70!black},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  language=Python
+}
+
+% ---- Références ----
+\usepackage{cite}
+
+% =========================================================
+\begin{document}
+
+% =========================================================
+%  PAGE DE GARDE
+% =========================================================
+\begin{titlepage}
+  \centering
+  \vspace*{1cm}
+
+  {\Huge\bfseries GraphBench Challenge\par}
+  \vspace{0.4cm}
+  {\Large Réfutation automatique de conjectures en théorie des graphes\par}
+
+  \vspace{1.5cm}
+  \rule{\linewidth}{0.4pt}
+  \vspace{0.8cm}
+
+  {\large\bfseries Étudiants :\par}
+  \vspace{0.3cm}
+  {\large Martim MOREIRA ALVES\par}
+  {\large Noé ARNAUD\par}
+
+  \vspace{0.8cm}
+  {\large\bfseries Formation :\par}
+  {\large Master 1 MIAGE — Université Paris Dauphine\par}
+
+  \vspace{0.8cm}
+  {\large\bfseries Date :\par}
+  {\large 12 mai 2026\par}
+
+  \vspace{0.8cm}
+  {\large\bfseries Dépôt GitHub :\par}
+  \href{https://github.com/AlvesMartim/OC_Graph}{\texttt{https://github.com/AlvesMartim/OC\_Graph}}
+
+  \vspace{1.2cm}
+  \rule{\linewidth}{0.4pt}
+  \vspace{0.8cm}
+
+  \begin{center}
+    \begin{tabular}{cc}
+      \toprule
+      \textbf{Conjectures réfutées} & \textbf{Score final (secondes)} \\
+      \midrule
+      \textbf{99 / 100} & \textbf{221,51 s} \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+
+  \vfill
+  {\small Rapport de projet — M1 MIAGE}
+\end{titlepage}
+
+% =========================================================
+%  TABLE DES MATIÈRES
+% =========================================================
+\tableofcontents
+\newpage
+
+% =========================================================
+%  1. INTRODUCTION ET OBJECTIF
+% =========================================================
+\section{Introduction et objectif}
+
+L'objectif de ce projet est simple : on nous donne 100 conjectures sur les graphes,
+et on doit en réfuter le plus possible automatiquement.  Une conjecture prend la forme
+d'une inégalité entre deux mesures d'un graphe (appelées \emph{invariants}) :
+
+\[
+  Y(G) \;\leq\; f\!\bigl(X(G)\bigr)
+  \qquad \text{ou} \qquad
+  Y(G) \;\geq\; f\!\bigl(X(G)\bigr)
+\]
+
+où $X$ et $Y$ sont par exemple le degré maximum, le nombre de triangles, ou la
+proximité, et $f$ est un polynôme donné.  Réfuter une conjecture, c'est trouver
+un graphe $G$ pour lequel l'inégalité est fausse.
+
+Pour mesurer à quel point un graphe ``viole'' une conjecture, on calcule :
+
+\[
+  \mathrm{violation}(G) =
+  \begin{cases}
+    Y(G) - f\!\bigl(X(G)\bigr) & \text{si signe } \leq \\
+    f\!\bigl(X(G)\bigr) - Y(G) & \text{si signe } \geq
+  \end{cases}
+\]
+
+Dès que ce score est positif, on a trouvé un contre-exemple.  Le score final du
+projet est la \textbf{somme des temps de réfutation}, avec une pénalité de $120$~s
+pour chaque conjecture qu'on n'arrive pas à réfuter.
+
+Nous avons développé deux approches.  La \textbf{Partie~1} est une heuristique
+de recherche locale : on part de graphes connus ou aléatoires, et on les modifie
+progressivement pour augmenter le score de violation.  La \textbf{Partie~2}
+utilise \textbf{FunSearch} : on demande à un LLM de générer des fonctions de
+guidage plus intelligentes, qu'on teste et améliore par itérations.
+
+% =========================================================
+%  2. HEURISTIQUE SIMPLE
+% =========================================================
+\section{Heuristique simple}
+
+\subsection{Vue d'ensemble}
+
+Pour chaque conjecture, l'heuristique suit trois étapes dans l'ordre
+(Figure~\ref{fig:pipeline}).  L'idée générale est de d'abord tester rapidement
+des graphes ``classiques'', puis si ça ne suffit pas, de lancer une recherche
+plus longue en modifiant des graphes au fil du temps.
+
+\begin{figure}[h]
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Phase 1} & \textbf{Phase 2} & \textbf{Phase 3} \\
+    Passe atlas ($\leq 5$~s) & Population initiale & Boucle locale (60~s) \\
+    \hline
+    Graphes $\leq 7$ nœuds & Seeds structurées & Tournoi $k=3$ \\
+    Arbres 8--12 nœuds & Graphes aléatoires & Mutation ciblée 70\% \\
+    Familles paramétriques & (10 graphes) & Liste taboue + kick \\
+    \hline
+  \end{tabular}
+  \caption{Pipeline de l'heuristique simple.}
+  \label{fig:pipeline}
+\end{figure}
+
+\subsection{Phase 1 : passe atlas}
+
+Avant de faire quoi que ce soit de complexe, on teste une grande liste de graphes
+connus pour voir si l'un d'eux est déjà un contre-exemple :
+
+\begin{itemize}
+  \item \textbf{Atlas NetworkX} : tous les graphes connexes à au plus 7 sommets
+        (1\,252 graphes), testés en quelques millisecondes.
+  \item \textbf{Arbres} de 8 à 12 sommets, si la conjecture porte sur les arbres.
+  \item \textbf{Familles classiques} pour $n$ de 8 à 25 : chemins, cycles, étoiles,
+        graphes complets, roues, chenilles, doubles-étoiles, bipartis, $K_n +$ bras.
+\end{itemize}
+
+Cette étape résout à elle seule \textbf{72 des 99 conjectures réfutées}.
+Beaucoup de conjectures ont des contre-exemples très simples, comme $K_2$
+(le graphe à 2 sommets reliés par une arête), trouvé en moins de 0,1~s.
+
+\subsection{Phase 2 : population initiale et seeds structurées}
+
+Si l'atlas n'a rien trouvé, on construit une population de départ de 10 graphes
+pour amorcer la recherche.  Une partie de ces graphes est choisie \emph{intelligemment}
+selon les invariants de la conjecture :
+
+\begin{itemize}
+  \item Si la conjecture parle de \texttt{remoteness} : on part de graphes
+        $K_n +$ bras (une clique avec un chemin accroché), qui ont une remoteness
+        très basse.
+  \item Si la conjecture parle de \texttt{proximity} : on part de doubles-étoiles
+        très déséquilibrées ou de ``brooms'' (chemin + étoile à un bout), qui
+        étirent le graphe et font baisser la proximity.
+\end{itemize}
+
+Le reste est généré aléatoirement en respectant la classe de graphes demandée
+(\texttt{connected}, \texttt{tree}, ou \texttt{claw\_free}).
+
+\subsection{Phase 3 : recherche locale avec diversification}
+
+La boucle principale modifie les graphes de la population un par un,
+en gardant ceux qui progressent vers une violation positive.
+Trois mécanismes évitent de rester bloqué au même endroit :
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwIn{Conjecture $C$, budget temps $T = 60$~s}
+\KwOut{Contre-exemple $G^*$ ou échec}
+\BlankLine
+$\text{tabu} \leftarrow \emptyset$\;
+$\text{pop} \leftarrow \text{GenerateInitialGraphs}(C)$\;
+Évaluer chaque $G \in \text{pop}$, conserver les 10 meilleurs\;
+\BlankLine
+\While{temps écoulé $< T$}{
+  $G \leftarrow \text{TournoiSelection}(\text{pop},\, k=3)$\;
+  \eIf{stagnation $>$ KICK (100 iter)}{
+    $H \leftarrow \text{KickMutate}(G,\, 4\text{ mutations})$\;
+  }{
+    $H \leftarrow \text{TargetedMutate}(G,\, C)$\;
+  }
+  $H \leftarrow \text{Repair}(H,\, \text{classe}(C))$\;
+  \If{$\mathrm{graph6}(H) \in \text{tabu}$}{\textbf{continue}\;}
+  Ajouter $\mathrm{graph6}(H)$ dans tabu\;
+  Calculer $\mathrm{violation}(H, C)$\;
+  \If{$\mathrm{violation}(H) > 0$}{\Return $H$\;}
+  Mettre à jour \text{pop}\;
+  \If{stagnation $>$ RESTART (500 iter)}{
+    $\text{pop} \leftarrow \text{GenerateInitialGraphs}(C)$\;
+    stagnation $\leftarrow 0$\;
+  }
+}
+\Return échec\;
+\caption{Recherche locale avec liste taboue, kick et redémarrage}
+\end{algorithm}
+
+\paragraph{Sélection par tournoi.}
+On tire 3 graphes au hasard dans la population et on choisit le meilleur.
+Cela favorise les bons graphes sans pour autant ignorer les autres.
+
+\paragraph{Mutations ciblées.}
+70\% du temps, la modification est \emph{guidée} par la conjecture : si on veut
+augmenter $Y$, on applique une mutation conçue pour ça.  Par exemple :
+\begin{itemize}
+  \item Augmenter \texttt{triangle\_number} : on cherche deux voisins d'un
+        même sommet qui ne sont pas encore reliés, et on ajoute l'arête.
+  \item Augmenter \texttt{diameter} : on accroche un nouveau sommet à une
+        feuille existante pour allonger le graphe.
+  \item Diminuer \texttt{proximity} : on ajoute un sommet à l'endroit le plus
+        ``loin'' du reste du graphe, pour l'étirer encore plus.
+  \item Augmenter \texttt{clique\_number} : on connecte un sommet extérieur
+        à tous les membres de la plus grande clique actuelle.
+\end{itemize}
+Les 30\% restants sont des mutations aléatoires (ajout/suppression d'arête ou de sommet)
+pour maintenir la diversité.
+
+\paragraph{Liste taboue.}
+Chaque graphe visité est converti en une chaîne \texttt{graph6} unique et mémorisé.
+Si on retombe sur un graphe déjà vu, on l'ignore.  Cela évite de tourner en rond.
+
+\paragraph{Kick et redémarrage.}
+Si le score ne progresse pas depuis 100 itérations, on applique 4 mutations
+d'un coup pour sortir du blocage (\emph{kick}).  Si ça ne suffit toujours pas
+après 500 itérations, on repart de zéro avec une nouvelle population.
+
+\subsection{Calcul des invariants}
+
+On calcule 25 invariants différents, mais seulement ceux dont la conjecture
+a besoin (calcul \emph{lazy}).  Les deux invariants de distance les plus utilisés
+sont définis ainsi : si $T_v$ est la somme des distances de $v$ à tous les autres
+sommets,
+
+\[
+  \mathrm{proximity}(G) = \frac{n-1}{\max_{v} T_v}, \qquad
+  \mathrm{remoteness}(G) = \frac{n-1}{\min_{v} T_v}.
+\]
+
+Les invariants spectraux (valeur propre maximale, connectivité algébrique) sont
+calculés avec NumPy.  Les invariants combinatoires comme le nombre de domination
+utilisent des algorithmes de NetworkX.
+
+\subsection{Réparation des graphes}
+
+Une mutation peut casser une propriété requise (par exemple déconnecter le graphe).
+Après chaque mutation, on répare automatiquement :
+
+\begin{itemize}
+  \item \texttt{connected} : on relie les composantes déconnectées par des arêtes aléatoires.
+  \item \texttt{tree} : on calcule un arbre couvrant (algorithme de Kruskal).
+  \item \texttt{claw\_free} : on supprime les arêtes qui créent des griffes $K_{1,3}$.
+\end{itemize}
+
+% =========================================================
+%  3. ARCHITECTURE FUNSEARCH
+% =========================================================
+\section{Architecture FunSearch}
+
+\subsection{Principe général}
+
+FunSearch~\cite{romera2024mathematical} est une technique proposée par Google
+DeepMind où un LLM génère du code, ce code est testé automatiquement, et les
+meilleurs résultats sont réinjectés dans le prompt pour guider la prochaine
+génération.  Ici, on l'applique de la façon suivante : au lieu de coder à la
+main comment guider la recherche, on demande au LLM de générer une
+\emph{fonction de score} Python qui remplace notre score de violation dans la
+boucle de recherche.
+
+\subsection{Boucle d'évolution}
+
+La boucle tourne 10 fois et suit toujours le même enchaînement :
+
+\begin{enumerate}
+  \item \textbf{Génération.}  On envoie un prompt à \texttt{gemini-2.5-flash-lite}
+        qui décrit le problème, les meilleures fonctions trouvées jusqu'ici, et les
+        conjectures que personne n'a encore réfutées.  Le LLM renvoie une fonction
+        Python \texttt{heuristic\_score(G, inv, conjecture)}.
+  \item \textbf{Compilation.}  On essaie d'exécuter le code.  S'il contient une
+        erreur de syntaxe, on passe à l'itération suivante.
+  \item \textbf{Évaluation.}  La fonction guide la recherche sur 25 conjectures
+        choisies aléatoirement (60~s max par conjecture, en parallèle).  On mesure
+        le coût total (temps de réfutation + 120~s de pénalité par échec).
+  \item \textbf{Sélection.}  On garde les 3 meilleures fonctions (coût le plus bas).
+  \item \textbf{Feedback.}  Ces 3 fonctions sont incluses dans le prompt suivant,
+        avec la liste des conjectures toujours non réfutées.
+\end{enumerate}
+
+\subsection{Intégration avec l'heuristique simple}
+
+La Partie~2 réutilise tout le code de la Partie~1 : même génération de population,
+mêmes mutations, même réparation des graphes.  On remplace uniquement la fonction
+qui évalue si un graphe est ``prometteur''.  La vérification finale (violation~$> 0$)
+reste celle de la Partie~1, ce qui garantit que les contre-exemples produits sont
+bien réels.
+
+% =========================================================
+%  4. RÉSULTATS EXPÉRIMENTAUX
+% =========================================================
+\section{Résultats expérimentaux}
+
+\subsection{Performance globale}
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{lr}
+    \toprule
+    \textbf{Métrique} & \textbf{Valeur} \\
+    \midrule
+    Conjectures réfutées & 99 / 100 \\
+    Score total (pénalité incluse) & 221,51 s \\
+    Temps moyen de réfutation & 1,03 s \\
+    Temps minimal & 0,032 s \\
+    Temps maximal & 29,21 s \\
+    Réfutées en moins d'1 s & 85 / 99 \\
+    Réfutées par la passe atlas & 72 / 99 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Résultats de la dernière exécution (11 mai 2026).}
+  \label{tab:results}
+\end{table}
+
+La passe atlas est de loin la plus efficace : elle réfute 72 conjectures sur 99
+avant même que la boucle de recherche ne commence.  Les 27 restantes sont
+réfutées par la recherche locale, la plus longue prenant 29~s.  Au total,
+85\% des conjectures réfutées l'ont été en moins d'une seconde.
+
+\subsection{La conjecture non réfutée}
+
+La seule conjecture qu'on n'a pas réussi à réfuter est :
+
+\begin{quote}
+  \textit{Si $G$ est connexe et sans griffe, $x = \mathrm{total\_domination\_number}$
+  et $y = \mathrm{independence\_number}$, alors $y(G) \leq 1 + x(G)$.}
+\end{quote}
+
+Le problème est double : la contrainte ``sans griffe'' réduit beaucoup l'espace
+des graphes explorables, et le nombre de domination totale est coûteux à calculer.
+En pratique, l'inégalité semble toujours vraie pour ces graphes — il est possible
+que cette conjecture soit vraie et donc non réfutable.
+
+\subsection{Distribution des temps de réfutation}
+
+Les temps de réfutation sont très déséquilibrés : 85 conjectures en moins d'1~s
+(trouvées dans l'atlas), et 14 entre 1 et 30~s (trouvées par la recherche locale).
+Ce déséquilibre s'explique simplement : certaines conjectures ont des contre-exemples
+très petits ($K_2$, $K_3$), d'autres demandent des graphes plus élaborés.
+
+\subsection{Contribution de FunSearch}
+
+FunSearch n'a pas changé le score final (déjà à 99/100 avec l'heuristique simple).
+Sur certaines conjectures difficiles, les fonctions générées par le LLM ont
+légèrement accéléré la recherche, mais l'impact global reste limité.
+
+% =========================================================
+%  5. DISCUSSION SCIENTIFIQUE
+% =========================================================
+\section{Discussion scientifique}
+
+\subsection{Quelles conjectures sont faciles à réfuter ?}
+
+Les plus faciles sont celles qui portent sur des invariants liés à la densité :
+\texttt{clique\_number}, \texttt{average\_degree}, \texttt{triangle\_number},
+\texttt{maximum\_degree}.  Ces invariants montent très vite dans les graphes
+denses, donc un simple $K_2$ ou $K_3$ suffit souvent.  Par exemple, la conjecture
+$\mathrm{clique\_number}(G) \leq -1/2 + 15/8 \cdot \bar{d}(G)$ est réfutée
+par $K_2$ en 0,06~s (violation de 0,625).
+
+Les conjectures sur les invariants de distance (diamètre, proximité) dans la
+classe \texttt{connected} sont aussi plus faciles que prévu : les chemins et
+cycles, présents dans l'atlas, donnent souvent des contre-exemples immédiats.
+
+\subsection{Quels invariants sont difficiles à manipuler ?}
+
+Trois catégories posent problème :
+
+\begin{itemize}
+  \item \textbf{total\_domination\_number avec claw\_free} : l'espace des
+        graphes sans griffe est très restreint, et le nombre de domination
+        totale change peu d'une mutation à l'autre.  C'est la seule conjecture
+        non réfutée.
+  \item \textbf{second\_smallest\_laplace\_eigenvalue} (connectivité algébrique) :
+        cet invariant est très peu sensible aux petites modifications du graphe,
+        ce qui rend la recherche locale lente à converger.
+  \item \textbf{largest\_distance\_eigenvalue} : invariant rare, absent de NetworkX,
+        qui demande de construire la matrice des distances et de calculer ses
+        valeurs propres à chaque évaluation — c'est coûteux.
+\end{itemize}
+
+\subsection{Quelles mutations sont efficaces ?}
+
+Les mutations les plus utiles dans notre expérience sont :
+
+\begin{enumerate}
+  \item \textbf{Le kick (4 mutations d'un coup)} : indispensable pour sortir
+        des blocages.  Sans lui, la recherche reste coincée sur des graphes
+        dont le score de violation est légèrement négatif et ne progresse plus.
+  \item \textbf{Augmenter le diamètre} (accrocher un nouveau sommet à une feuille) :
+        une modification simple qui a un effet immédiat sur le diamètre, la
+        proximité et la remoteness à la fois.
+  \item \textbf{Les seeds $K_n +$ bras} : ces graphes (une clique avec un chemin
+        accroché) combinent haute densité locale et longue portée, ce qui les
+        rend utiles pour beaucoup de conjectures en même temps.
+\end{enumerate}
+
+Les mutations aléatoires (30\% du temps) sont aussi utiles : elles empêchent
+la recherche de se concentrer trop sur une seule structure.
+
+\subsection{FunSearch améliore-t-il réellement l'heuristique ?}
+
+Dans notre cas, FunSearch n'a pas amélioré le score final : l'heuristique
+simple était déjà à 99/100.  Sur des conjectures difficiles prises séparément,
+les fonctions du LLM ont parfois guidé la recherche un peu plus vite, mais
+l'écart reste faible.
+
+FunSearch serait probablement plus utile si l'heuristique de départ était moins
+efficace : c'est quand on ne sait pas comment guider la recherche que le LLM
+peut apporter quelque chose de nouveau.
+
+\subsection{L'IA a-t-elle produit des idées utiles ?}
+
+En partie.  Parmi les idées originales générées par le LLM :
+
+\begin{itemize}
+  \item Récompenser les graphes dont la densité dépasse un seuil adaptatif
+        selon la conjecture, ce qui oriente vers des graphes plus denses.
+  \item Utiliser le ratio degré max / degré min comme indicateur de
+        l'hétérogénéité du graphe.
+  \item Pénaliser les graphes réguliers quand la conjecture fait intervenir
+        des invariants non linéaires.
+\end{itemize}
+
+En revanche, beaucoup de fonctions générées étaient banales (renvoyer directement
+le score de violation) ou carrément invalides syntaxiquement.  Le LLM est utile
+comme source d'idées, mais pas fiable pour les appliquer correctement sans
+vérification.
+
+% =========================================================
+%  CONCLUSION
+% =========================================================
+\section*{Conclusion}
+
+On a réussi à réfuter \textbf{99 conjectures sur 100} avec un score total de
+\textbf{221,51~s}.  L'heuristique simple fait l'essentiel du travail : la passe
+atlas réfute 72\% des cas en quelques millisecondes, et la recherche locale avec
+mutations ciblées gère le reste.  La seule conjecture non réfutée (sans griffe +
+domination totale) semble peut-être vraie.
+
+FunSearch est une piste intéressante, mais dans ce contexte il n'a pas apporté
+de gain visible.  Pour la suite, il serait plus prometteur de lui demander de
+générer directement des familles de graphes plutôt que des fonctions de score,
+ou de l'utiliser sur des conjectures où on n'a aucune idée de comment guider la
+recherche à la main.
+
+% =========================================================
+%  BIBLIOGRAPHIE
+% =========================================================
+\newpage
+\bibliographystyle{plain}
+\begin{thebibliography}{9}
+
+\bibitem{romera2024mathematical}
+B.~Romera-Paredes, M.~Barekatain, A.~Novikov \emph{et al.}
+\newblock Mathematical discoveries from program search with large language models.
+\newblock \emph{Nature}, 625:468--475, 2024.
+
+\bibitem{hagberg2008exploring}
+A.~Hagberg, P.~Swart, D.~S.~Chult.
+\newblock Exploring network structure, dynamics, and function using {NetworkX}.
+\newblock In \emph{Proceedings of the 7th Python in Science Conference
+  (SciPy2008)}, pages 11--15, 2008.
+
+\bibitem{glover1989tabu}
+F.~Glover.
+\newblock Tabu search — Part I.
+\newblock \emph{ORSA Journal on Computing}, 1(3):190--206, 1989.
+
+\bibitem{bondy1976graph}
+J.~A.~Bondy, U.~S.~R.~Murty.
+\newblock \emph{Graph Theory with Applications}.
+\newblock Macmillan, 1976.
+
+\bibitem{aouchiche2013proximity}
+M.~Aouchiche, P.~Hansen.
+\newblock Proximity and remoteness in graphs: results and conjectures.
+\newblock \emph{Networks}, 58(2):95--102, 2013.
+
+\end{thebibliography}
+
+\end{document}
